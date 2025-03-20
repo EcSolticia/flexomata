@@ -23,6 +23,18 @@ class Grid {
     std::vector<std::vector<int>> data;
 
 public:
+    ///  Enum for representing direction in the Grid object
+    enum Direction {
+        TOP_LEFT, /// Top left
+        TOP, /// Top
+        TOP_RIGHT, /// Top right
+        LEFT, /// Left
+        RIGHT, /// Right
+        BOTTOM_LEFT, /// Bottom left
+        BOTTOM, /// Bottom
+        BOTTOM_RIGHT, /// Bottom right
+    };
+
     void set_width(const size_t width) {
         this->width = width;
     }
@@ -58,6 +70,15 @@ public:
      * @return const std::vector<std::vector<int>>* const 
      */
     const std::vector<std::vector<int>>* const get_data() const;
+    /**
+     * @brief Get a neighboring cell in a particular direction
+     * 
+     * @param x The x coordinate of the reference cell
+     * @param y The y coordinate of the reference cell
+     * @param dir The neighbor to get
+     * @return int 
+     */
+    int get_neighbor(const size_t x, const size_t y, Direction dir) const;
 
     /**
      * @brief Initialize the data variable

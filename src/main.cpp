@@ -10,6 +10,8 @@
  */
 #include <SDL2/SDL.h>
 
+#include <iostream>
+
 #include "grid/grid.h"
 
 int main() {
@@ -21,11 +23,22 @@ int main() {
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderClear(renderer);
 
+    /*
     Grid g = Grid(1, 1);
     if (g.get_data(0, 0) == -1) {
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderClear(renderer);
     }
+    */
+
+    Grid g = Grid(32, 32);
+    g.set_data(0, 0, 1);
+    g.set_data(0, 1, 1);
+    g.set_data(0, 2, 1);
+    g.set_data(1, 2, 1);
+    g.set_data(2, 1, 1);
+
+    std::cout << g.get_neighbor(0, 1, g.LEFT) << std::endl;
 
     SDL_RenderPresent(renderer);
 

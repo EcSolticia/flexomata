@@ -10,6 +10,54 @@ const std::vector<std::vector<int>>* const Grid::get_data() const {
     return &(this->data);
 }
 
+int Grid::get_neighbor(const size_t x, const size_t y, Direction dir) const {
+    size_t tl_x;
+    size_t tl_y;
+    switch(dir) {
+        case TOP_LEFT:
+            tl_x = (x - 1) % this->get_width();
+            tl_y = (y - 1) % this->get_height();
+            return this->get_data(tl_x, tl_y);
+            break;
+        case TOP:
+            tl_x = x % this->get_width();
+            tl_y = (y - 1) % this->get_height();
+            return this->get_data(tl_x, tl_y);
+            break;
+        case TOP_RIGHT:
+            tl_x = (x + 1) % this->get_width();
+            tl_y = (y - 1) % this->get_height();
+            return this->get_data(tl_x, tl_y);
+            break;
+        case LEFT:
+            tl_x = (x - 1) % this->get_width();
+            tl_y = y % this->get_height();
+            return this->get_data(tl_x, tl_y);
+            break;
+        case RIGHT:
+            tl_x = (x + 1) % this->get_width();
+            tl_y = y % this->get_height();
+            return this->get_data(tl_x, tl_y);
+            break;
+        case BOTTOM_LEFT:
+            tl_x = (x - 1) % this->get_width();
+            tl_y = (y + 1) % this->get_height();
+            return this->get_data(tl_x, tl_y);
+            break;
+        case BOTTOM:
+            tl_x = x % this->get_width();
+            tl_y = (y + 1) % this->get_height();
+            return this->get_data(tl_x, tl_y);
+            break;
+        case BOTTOM_RIGHT:
+            tl_x = (x + 1) % this->get_width();
+            tl_y = (y + 1) % this->get_height();
+            return this->get_data(tl_x, tl_y);
+            break;
+    }
+    return -1;
+}
+
 void Grid::initialize_data() {
     const size_t width = this->get_width();
     const size_t height = this->get_height();
