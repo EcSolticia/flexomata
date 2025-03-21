@@ -18,31 +18,15 @@ int main() {
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
 
-    SDL_CreateWindowAndRenderer(640, 480, 0, &window, &renderer);
+    Grid grid = Grid(16, 16);
 
-    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
-    SDL_RenderClear(renderer);
-
-    /*
-    Grid g = Grid(1, 1);
-    if (g.get_data(0, 0) == -1) {
-        SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        SDL_RenderClear(renderer);
-    }
-    */
-
-    Grid g = Grid(32, 32);
-    g.set_data(0, 0, 1);
-    g.set_data(0, 1, 1);
-    g.set_data(0, 2, 1);
-    g.set_data(1, 2, 1);
-    g.set_data(2, 1, 1);
-
-    std::cout << g.get_neighbor(0, 1, g.LEFT) << std::endl;
-
-    SDL_RenderPresent(renderer);
-
-    SDL_Delay(5000);
+    GridDisplay grid_display = GridDisplay(window, renderer, &grid);
+    grid_display.create_window_with_bg(640, 480, 255, 255, 255, 255);
+    grid_display.draw_cell(8, 8);
+    grid_display.draw_cell(9, 8);
+    grid_display.draw_cell(10, 8);
+    grid_display.draw_cell(12, 12);
+    grid_display.present_display(5000);
 
     return 0;
 }
