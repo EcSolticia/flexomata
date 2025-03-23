@@ -13,6 +13,7 @@
 #include <SDL2/SDL.h>
 
 #include <iostream>
+#include <stdexcept>
 
 #include <vector>
 
@@ -24,13 +25,15 @@ typedef std::vector<size_t> Vector2;
  * Represents the value at the ith column and jth row as `data[i][j]`.
  * Therefore, the elements in `data` are the columns.
  * 
+ * Entries of the `data` variable are unsigned integers corresponding to states.
+ * 
  * Bottom-level entries of the `data` variable represent the states of the cells.
  * 
  */
 class Grid {
     size_t width;
     size_t height;
-    std::vector<std::vector<int>> data;
+    std::vector<std::vector<size_t>> data;
 
 public:
     ///  Enum for representing direction in the Grid object
@@ -66,30 +69,25 @@ public:
      * @param y The y coordinate of the cell to set.
      * @param value The value to set the cell to.
      */
-    void set_data(const size_t x, const size_t y, const int value);
+    void set_data(const size_t x, const size_t y, const size_t value);
     /**
      * @brief Get the value of a specific cell in the grid
      * 
      * @param x The x coordinate of the cell the value of which to get.
      * @param y The y coordinate of the cell the value of which to get.
-     * @return int 
+     * @return size_t 
      */
-    int get_data(const size_t x, const size_t y) const;
-    /**
-     * @brief Get a full-constant pointer to the data variable
-     * 
-     * @return const std::vector<std::vector<int>>* const 
-     */
-    const std::vector<std::vector<int>>* const get_data() const;
+    size_t get_data(const size_t x, const size_t y) const;
+
     /**
      * @brief Get a neighboring cell in a particular direction
      * 
      * @param x The x coordinate of the reference cell
      * @param y The y coordinate of the reference cell
      * @param dir The neighbor to get
-     * @return int 
+     * @return size_t 
      */
-    int get_neighbor(const size_t x, const size_t y, Direction dir) const;
+    size_t get_neighbor(const size_t x, const size_t y, Direction dir) const;
 
     /**
      * @brief Get the number of neighbors of a specified state
@@ -99,7 +97,7 @@ public:
      * @param state The state to compare the neighbor to
      * @return size_t 
      */
-    size_t get_neighbor_of_state_count(const size_t x, const size_t y, int state) const;
+    size_t get_neighbor_of_state_count(const size_t x, const size_t y, const size_t state) const;
 
     /**
      * @brief Initialize the data variable
@@ -120,10 +118,72 @@ public:
 };
 
 /**
+ * @brief The class for managing different potential states of cells and their properties.
+ * 
+ * Each index of the member variable `color` corresponds to a state. Therefore, if `i` is a `size_t` representing
+ * a state defined in this class, `color[i]` is the color corresponding to that state. That state will be drawn using
+ * said color.
+ * 
+ */
+class StateManager {
+    /**
+     * @brief Variable for keeping track of the number of defined states
+     * 
+     */
+    size_t states;
+
+    std::vector<SDL_Color> colors;
+
+public:
+
+    /**
+     * @brief Set the number of states to be defined.
+     * 
+     * @param max_states 
+     */
+    void set_max_states(const size_t max_states) {
+        (this->colors).resize(max_states);
+    }
+
+    /**
+     * @brief 
+     * 
+     * @param color 
+     */
+    void add_state(SDL_Color color) {
+        const size_t l = (this->colors).size();
+        if (l < (this->states + 1)) {
+            throw std::length_error("Attempting to add more states that maximum");
+        }
+
+        (this->colors)[states] = color;
+
+        ++(this->states);
+    }
+
+    SDL_Color get_state_color(const size_t state) {
+        if (state >= this->states) {
+            throw std::length_error("Provided state value exceeds maximal state count");
+        }
+
+        return (this->colors)[state];
+    }
+
+    /**
+     * @brief Construct a new StateManager object
+     * 
+     */
+    StateManager() {
+        this->states = 0;
+        this->colors = std::vector<SDL_Color> ();
+    }
+};
+
+/**
  * @brief Class for drawing the Grid on the window with SDL2
  * 
  */
-class GridDisplay {
+class GridInterface {
     /**
      * @brief The height and width of each specific cell in pixels
      * 
@@ -143,6 +203,7 @@ class GridDisplay {
     SDL_Window* window;
     SDL_Renderer* renderer;
     Grid* grid;
+    StateManager* state_manager;
 
 public:
     void set_cell_length(const size_t cell_length) {
@@ -163,22 +224,17 @@ public:
         return this->pivot_y;
     }
 
+    Grid* get_grid() const {
+        return this->grid;
+    }
+
     /**
-     * @brief Create the SDL Window and Renderer and apply a background color
+     * @brief Create the SDL Window and Renderer with a white background
      * 
      * @param width The width of the window
      * @param height The height of the window
-     * @param r 
-     * @param g 
-     * @param b 
-     * @param a 
      */
-    void create_window_with_bg(const size_t width, 
-                                const size_t height, 
-                                const size_t r, 
-                                const size_t g, 
-                                const size_t b, 
-                                const size_t a);
+    void create_window(const size_t width, const size_t height);
 
     /**
      * @brief Get the top-left origin of the specified cell in the window
@@ -204,21 +260,26 @@ public:
     Vector2 get_rect_origin(const size_t x, const size_t y) const;
 
     /**
-     * @brief The cell with the given coordinate
+     * @brief Draw the cell with the given coordinate
      * 
      * @param x The x coordinate of the cell
      * @param y The y coordinate of the cell
      */
-    void draw_cell(const size_t x, const size_t y) const;
+    void draw_cell(const size_t x, const size_t y, const size_t state) const;
+
+    /**
+     * @brief Iterates through each cell to draw the corresponding cell based on data
+     * 
+     */
+    void update_display_as_whole();
 
     /**
      * @brief Present the renderer
      * 
      * @param delay Milliseconds taken till the program automatically terminates
      */
-    void present_display(const size_t delay);
+    void present_display(const size_t delay) const;
 
-    GridDisplay(SDL_Window* window, SDL_Renderer* renderer, Grid* grid);
-    ~GridDisplay() {
-    }
+    GridInterface(SDL_Window* window, SDL_Renderer* renderer, Grid* grid, StateManager* state_manager);
+
 };
