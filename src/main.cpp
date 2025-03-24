@@ -18,50 +18,64 @@ int main() {
 
     SDL_Window* window = nullptr;
     SDL_Renderer* renderer = nullptr;
-    Grid grid = Grid(64, 64);
+    Grid grid_obj = Grid(64, 64);
 
     StateManager state_manager = StateManager();
     state_manager.set_max_states(2);
-    SDL_Color green;
-    green.r = 0;
-    green.g = 255;
-    green.b = 0;
-    green.a = 255;
-    SDL_Color black;
-    black.r = 0;
-    black.g = 0;
-    black.b = 0;
-    black.a = 255;
+    SDL_Color live;
+    live.r = 0;
+    live.g = 255;
+    live.b = 0;
+    live.a = 255;
+    SDL_Color dead;
+    dead.r = 0;
+    dead.g = 0;
+    dead.b = 0;
+    dead.a = 255;
 
     try {
-        state_manager.add_state(black);
-        state_manager.add_state(green);
+        state_manager.add_state(dead);
+        state_manager.add_state(live);
     } catch (std::length_error le) {
         std::cerr << "Length error booh" << std::endl;
         return 0;
     }
 
-    GridInterface grid_interface = GridInterface(window, renderer, &grid, &state_manager);
-    grid_interface.set_cell_length(64);
+    GridInterface grid_interface = GridInterface(window, renderer, &grid_obj, &state_manager);
+    Grid* grid = grid_interface.get_grid();
+
+    grid_interface.set_cell_length(16);
 
     SimulationCore sim_core = SimulationCore(&grid_interface);
 
+    // conway's game of life
     std::function<size_t(size_t, size_t)> eval_func = [grid](size_t x, size_t y) -> size_t {
-        return !grid.get_data(x, y);
+        size_t c = grid->get_neighbor_of_state_count(x, y, 1);
+
+        if (grid->get_data(x, y) == 1) {
+            return (size_t)(c == 2 || c == 3);
+        } else {
+            return (size_t)(c == 3);
+        }
     };
 
     sim_core.set_cell_eval(eval_func);
 
     grid_interface.create_window(512, 512);
+    
+    grid->set_data(2, 2, 1);
+    grid->set_data(2, 3, 1);
+    grid->set_data(3, 3, 1);
+    grid->set_data(2, 4, 1);
 
-    for (size_t i = 0; i < 10; ++i) {
-        grid.set_data(i, i, 1);
-    }
+    grid_interface.update_display_as_whole();
+    SDL_Delay(1000);
 
-    //sim_core.execute_step();
+    sim_core.execute_step();
+
     grid_interface.update_display_as_whole();
 
-    SDL_Delay(5000);
+    SDL_Delay(1000);
 
     return 0;
 }

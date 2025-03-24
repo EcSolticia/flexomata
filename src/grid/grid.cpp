@@ -8,51 +8,48 @@ size_t Grid::get_data(const size_t x, const size_t y) const {
 }
 
 size_t Grid::get_neighbor(const size_t x, const size_t y, Direction dir) const {
-    size_t tl_x;
-    size_t tl_y;
+    size_t neighbor_x;
+    size_t neighbor_y;
+    size_t width = this->get_width();
+    size_t height = this->get_height();
+
     switch(dir) {
         case TOP_LEFT:
-            tl_x = (x - 1 + this->get_width()) % this->get_width();
-            tl_y = (y - 1 + this->get_height()) % this->get_height();
-            return this->get_data(tl_x, tl_y);
+            neighbor_x = (x - 1 + width) % width;
+            neighbor_y = (y - 1 + height) % height;
             break;
         case TOP:
-            tl_x = (x + this->get_width()) % this->get_width();
-            tl_y = (y - 1 + this->get_height()) % this->get_height();
-            return this->get_data(tl_x, tl_y);
+            neighbor_x = x;
+            neighbor_y = (y - 1 + height) % height;
             break;
         case TOP_RIGHT:
-            tl_x = (x + 1 + this->get_width()) % this->get_width();
-            tl_y = (y - 1 + this->get_height()) % this->get_height();
-            return this->get_data(tl_x, tl_y);
+            neighbor_x = (x + 1) % width;
+            neighbor_y = (y - 1 + height) % height;
             break;
         case LEFT:
-            tl_x = (x - 1 + this->get_width()) % this->get_width();
-            tl_y = (y + this->get_height()) % this->get_height();
-            return this->get_data(tl_x, tl_y);
+            neighbor_x = (x - 1 + width) % width;
+            neighbor_y = y;
             break;
         case RIGHT:
-            tl_x = (x + 1 + this->get_width()) % this->get_width();
-            tl_y = (y + this->get_height()) % this->get_height();
-            return this->get_data(tl_x, tl_y);
+            neighbor_x = (x + 1) % width;
+            neighbor_y = y;
             break;
         case BOTTOM_LEFT:
-            tl_x = (x - 1 + this->get_width()) % this->get_width();
-            tl_y = (y + 1 + this->get_height()) % this->get_height();
-            return this->get_data(tl_x, tl_y);
+            neighbor_x = (x - 1 + width) % width;
+            neighbor_y = (y + 1) % height;
             break;
         case BOTTOM:
-            tl_x = (x + this->get_width()) % this->get_width();
-            tl_y = (y + 1 + this->get_height()) % this->get_height();
-            return this->get_data(tl_x, tl_y);
+            neighbor_x = x;
+            neighbor_y = (y + 1) % height;
             break;
         case BOTTOM_RIGHT:
-            tl_x = (x + 1 + this->get_width()) % this->get_width();
-            tl_y = (y + 1 + this->get_height()) % this->get_height();
-            return this->get_data(tl_x, tl_y);
+            neighbor_x = (x + 1) % width;
+            neighbor_y = (y + 1) % height;
             break;
+        default:
+            return -1;
     }
-    return -1;
+    return this->get_data(neighbor_x, neighbor_y);
 }
 
 size_t Grid::get_neighbor_of_state_count(const size_t x, const size_t y, const size_t state) const {
@@ -90,6 +87,14 @@ Grid::Grid(const size_t width, const size_t height) {
     this->set_width(width);
     this->set_height(height);
 
+    initialize_data();
+}
+
+Grid::Grid(const Grid& grid) {
+    this->set_width(grid.get_width());
+    this->set_height(grid.get_height());
+    this->data = grid.data;
+    
     initialize_data();
 }
 
@@ -154,9 +159,12 @@ void GridInterface::present_display(const size_t delay) const {
 GridInterface::GridInterface(SDL_Window* window, SDL_Renderer* renderer, Grid* grid, StateManager* state_manager) {
     this->window = window;
     this->renderer = renderer;
-    this->grid = grid;
+    this->grid = new Grid(*grid);
     this->state_manager = state_manager;
 
     this->set_cell_length(8);
     this->set_pivot(0, 0);
+}
+GridInterface::~GridInterface() {
+    delete this->grid;
 }

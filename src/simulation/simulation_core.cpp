@@ -10,6 +10,7 @@ void SimulationCore::execute_step() const {
     }
 
     Grid* grid = (this->grid_interface)->get_grid();
+    Grid* gridcp = new Grid(*grid);
     
     const size_t max_i = grid->get_width();
     const size_t max_j = grid->get_height();
@@ -20,11 +21,13 @@ void SimulationCore::execute_step() const {
         for (size_t j = 0; j < max_j; ++j) {
             // calculate new value
             size_t new_val = (this->cell_eval(i, j));
-            
             // set data accordingly
-            grid->set_data(i, j, new_val);
+            gridcp->set_data(i, j, new_val);
         }
     }
+
+    (this->grid_interface)->set_grid(gridcp);
+
 }
 
 SimulationCore::SimulationCore(GridInterface* grid_interface) {

@@ -113,6 +113,14 @@ public:
      * @param height The number of rows of the grid.
      */
     Grid(const size_t width, const size_t height);
+
+    /**
+     * @brief Construct a new Grid object (copy constructor)
+     * 
+     * @param grid The grid object to copy
+     */
+    Grid(const Grid& grid);
+
     ~Grid() {
     }
 };
@@ -206,6 +214,11 @@ class GridInterface {
     StateManager* state_manager;
 
 public:
+    void set_grid(Grid* grid) {
+        delete this->grid;
+        this->grid = grid;
+    }
+
     void set_cell_length(const size_t cell_length) {
         this->cell_length = cell_length;
     }
@@ -281,5 +294,5 @@ public:
     void present_display(const size_t delay) const;
 
     GridInterface(SDL_Window* window, SDL_Renderer* renderer, Grid* grid, StateManager* state_manager);
-
+    ~GridInterface();
 };
