@@ -40,7 +40,6 @@ class StateManager {
      */
     std::vector<State> states;
 
-public:
     /**
      * @brief Sorts the `states` variable in an ascending order and checks for consistency.
      *
@@ -50,6 +49,8 @@ public:
      * @throws std::runtime_error If a state is missing from the sequence.
      */
     void sort_and_check();
+
+public:
 
     /**
      * @brief Get the color of the state defined with the specified value.
@@ -61,6 +62,8 @@ public:
      * error due to inconsistency.
      * 
      * Is executed from within the simulation loop.
+     * 
+     * To avoid segfaults, requires that the `states` vector is non-empty.
      * 
      * @param value The value of the state.
      * @return SDL_Color The color associated with the state.

@@ -14,6 +14,10 @@ void StateManager::sort_and_check() {
 }
 
 SDL_Color StateManager::get_color_of_state(const size_t value) {
+    if ((this->states).size() == 0) {
+        throw std::domain_error("The `states` vector is found to be empty.");
+    }
+
     return states[value].color;
 }
 
