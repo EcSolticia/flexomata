@@ -2,9 +2,12 @@
 
 #include "SDL2/SDL.h"
 #include <memory>
+#include <vector>
+#include <stdexcept>
+#include <algorithm>
 
 /**
- * @brief The fundamental structure representing a state of a cell.
+ * @brief The fundamental structure representing the state of a cell.
  * 
  */
 struct State {
@@ -19,4 +22,55 @@ struct State {
      * 
      */
     SDL_Color color;
+};
+
+/**
+ * @brief Interface for defining and managing different states.
+ * 
+ * It sorts states in an ascending order and expects each unsigned integer from 0
+ * to the the maximum state value to correspond to a defined state. If there is a
+ * missing state, it throws an error.
+ */
+class StateManager {
+    /**
+     * @brief The vector of defined states.
+     * 
+     * Cannot be modified following initialization.
+     * 
+     */
+    std::vector<State> states;
+
+public:
+    /**
+     * @brief Sorts the `states` variable in an ascending order and checks for consistency.
+     *
+     * The `StateManager` class expects each unsigned integer from 0 to the maximum state
+     * value to be present. If a state is missing, an exception is thrown.
+     *
+     * @throws std::runtime_error If a state is missing from the sequence.
+     */
+    void sort_and_check();
+
+    /**
+     * @brief Get the color of the state defined with the specified value.
+     * 
+     * Assumes that `sort_and_check` has already been called and it did not
+     * throw errors. The `StateManager` constructor is expected to call
+     * `sort_and_check` following value assignment, and it is expected that
+     * the program will close prior to reaching this point if it throws an
+     * error due to inconsistency.
+     * 
+     * Is executed from within the simulation loop.
+     * 
+     * @param value The value of the state.
+     * @return SDL_Color The color associated with the state.
+     */
+    SDL_Color get_color_of_state(const size_t value);
+
+    /**
+     * @brief Construct a new StateManager object
+     * 
+     * @param states_p
+     */
+    StateManager(const std::vector<State>& states);
 };
