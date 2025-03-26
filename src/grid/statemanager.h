@@ -1,3 +1,14 @@
+/**
+ * @file statemanager.h
+ * @author Miftahul (ecsolticia@gmail.com)
+ * @brief 
+ * @version 0.1
+ * @date 2025-03-26
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
+
 #pragma once
 
 #include "SDL2/SDL.h"
@@ -22,6 +33,21 @@ struct State {
      * 
      */
     SDL_Color color;
+
+    /**
+     * @brief Overload the comparison operator
+     * 
+     * Considers two `State` objects to be "equal" if and only if their
+     * values are equal. Assumes that each state considered by the state
+     * manager will be unique, and hence have a unique color.
+     * 
+     * @param other The state to compare the present state to.
+     * @return true If their values match.
+     * @return false Otherwise.
+     */
+    bool operator==(const State& other) const {
+        return (this->value == other.value);
+    }
 };
 
 /**
@@ -68,7 +94,7 @@ public:
      * @param value The value of the state.
      * @return SDL_Color The color associated with the state.
      */
-    SDL_Color get_color_of_state(const size_t value);
+    SDL_Color get_color_of_state(const Uint8 value);
 
     /**
      * @brief Construct a new StateManager object

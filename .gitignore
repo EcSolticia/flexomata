@@ -40,3 +40,5 @@ build
 # Doxygen-generated docs
 docs/html
 docs/latex
+
+*.swp
