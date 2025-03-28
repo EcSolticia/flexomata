@@ -60,7 +60,7 @@ public:
     }
 
     /**
-     * @brief Construct a new CoordSystem object
+     * @brief Construct a new CoordSystem object.
      * 
      * @pre That `width != 0 && height != 0`. Does not check for satisfaction as is it
      * expected that the Grid object constructor will handle the error.
@@ -70,5 +70,15 @@ public:
     CoordSystem(const size_t width, const size_t height) {
         this->width = width;
         this->height = height;
+    }
+
+    /**
+     * @brief Construct a new CoordSystem object. (Copy Constructor)
+     * 
+     * @param from 
+     */
+    CoordSystem(const CoordSystem& from) {
+        this->width = from.width;
+        this->height = from.height;
     }
 };

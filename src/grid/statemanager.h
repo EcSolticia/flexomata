@@ -38,15 +38,28 @@ struct State {
      * @brief Overload the comparison operator
      * 
      * Considers two `State` objects to be "equal" if and only if their
-     * values are equal. Assumes that each state considered by the state
-     * manager will be unique, and hence have a unique color.
+     * values are equal.
      * 
      * @param other The state to compare the present state to.
      * @return true If their values match.
      * @return false Otherwise.
      */
     bool operator==(const State& other) const {
-        return (this->value == other.value);
+        bool values_eq = (this->value == other.value);
+        SDL_Color c1 = this->color;
+        SDL_Color c2 = other.color;
+        bool colors_eq = (c1.r == c2.r && c1.g == c2.g && c1.b == c2.b && c1.a == c2.a);
+        return (values_eq && colors_eq);
+    }
+    /**
+     * @brief Negation of the comparison operator.
+     * 
+     * @param other The state to compare the present state to.
+     * @return true If their values do not match. 
+     * @return false Otherwise.
+     */
+    bool operator!=(const State& other) const {
+        return (!(*this == other));
     }
 };
 
@@ -79,17 +92,37 @@ class StateManager {
 public:
 
     /**
-     * @brief Get the color of the state defined with the specified value.
+     * @brief Get the State defined at the specified index.
      * 
-     * Assumes that `sort_and_check` has already been called and it did not
+     * @pre That `sort_and_check` has already been called and it did not
      * throw errors. The `StateManager` constructor is expected to call
      * `sort_and_check` following value assignment, and it is expected that
      * the program will close prior to reaching this point if it throws an
      * error due to inconsistency.
      * 
-     * Is executed from within the simulation loop.
+     * @pre That the states vector is non-empty to avoid segmentation faults.
+     * This is ensured by the constructor of the object itself, which would
+     * throw an error if an attempt to initialize it with an empty vector is made.
      * 
-     * To avoid segfaults, requires that the `states` vector is non-empty.
+     * @param of_value The value of the State to get.
+     * @return State 
+     */
+    State get_state(const Uint8 of_value) const;
+
+    /**
+     * @brief Get the color of the state defined with the specified value.
+     * 
+     * @pre That `sort_and_check` has already been called and it did not
+     * throw errors. The `StateManager` constructor is expected to call
+     * `sort_and_check` following value assignment, and it is expected that
+     * the program will close prior to reaching this point if it throws an
+     * error due to inconsistency.
+     * 
+     * @pre That the states vector is non-empty to avoid segmentation faults.
+     * This is ensured by the constructor of the object itself, which would
+     * throw an error if an attempt to initialize it with an empty vector is made.
+     * 
+     * @note Is executed from within the simulation loop.
      * 
      * @param value The value of the state.
      * @return SDL_Color The color associated with the state.
@@ -99,7 +132,17 @@ public:
     /**
      * @brief Construct a new StateManager object
      * 
+     * @throws std::domain_error If the passed states vector is empty.
      * @param states_p
      */
     StateManager(const std::vector<State>& states);
+
+    /**
+     * @brief Construct a new StateManager object. (Copy constructor)
+     *
+     * @note Does not perform sorting and checks as it is a copy.
+     * 
+     * @param from 
+     */
+    StateManager(const StateManager& from);
 };

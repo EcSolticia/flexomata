@@ -25,7 +25,7 @@ class Grid {
 	 * and their properties.
 	 * 
 	 */
-	std::unique_ptr<StateManager> state_manager;
+	std::unique_ptr<StateManager> state_manager = nullptr;
 
     /**
      * @brief The row-major order indexed vector containing data about cell states.
@@ -75,13 +75,20 @@ class Grid {
 	std::unique_ptr<CoordSystem> coord_system;
 
 public:
+	size_t get_width() const;
+	size_t get_height() const;
 
 	/**
 	 * @brief Construct the associated StateManager object with the provided
 	 * states.
 	 * 
-	 * Requires that `state_manager` contains `nullptr`, that is, that the object
+	 * @pre That `state_manager` contains `nullptr`, that is, that the object
 	 * has not previously been constructed.
+	 * 
+	 * The associated StateManager object is not initialized in the Grid constructor
+	 * to make the syntax more readable. It would require less guesswork to know that
+	 * the vector of State objects is being used to initialize the StateManager object
+	 * this way.
 	 * 
 	 * @throws std::runtime_error If a StateManager object was already constructed.
 	 * @param states 
@@ -89,11 +96,35 @@ public:
 	void initialize_state_manager(const std::vector<State>&	 states);
 
 	/**
+	 * @brief Check whether the associated StateManager object is initialized.
+	 * 
+	 * @return true If initialized.
+	 * @return false Otherwise.
+	 */
+	bool is_state_manager() const;
+
+	/**
+	 * @brief Get the State defined in the associated Grid's StateManager corresponding
+	 * to the given State value.
+	 * 
+	 * 
+	 * @param value The state value.
+	 * @return State 
+	 */
+	State get_state_of_value(const Uint8 value) const;
+
+	/**
 	 * @brief Get the color of the given State object.
 	 * 
+	 * 
+	 * @pre That the associated StateManager is initialized. Will not throw any errors
+	 * in the case that it is not, and may lead to undefined behavior. Enforce prior
+	 * initialization by design.
+	 * 
 	 * @pre That the input State is a valid one. That is, it is defined in the
-	 * StateManager. This function does not explicitly check if the given state
-	 * is valid.
+	 * StateManager.
+	 * @throws std::domain_error If the input State is invalid.
+	 * 
 	 * @param state 
 	 * @returns SDL_Color
 	 */
@@ -131,4 +162,14 @@ public:
 	 * @param side_length The side length of the Grid cell squares.
 	 */
 	Grid(const size_t width, const size_t height, const size_t side_length);
+
+	/**
+	 * @brief Construct a new Grid object. (Copy constructor)
+	 * 
+	 * @note This constructor has no error-checking as it indirectly relies on that of
+	 * the original constructor.
+	 * 
+	 * @param from 
+	 */
+	Grid(const Grid& from);
 };

@@ -1,5 +1,12 @@
 #include "grid.h"
 
+size_t Grid::get_width() const {
+    return this->width;
+}
+size_t Grid::get_height() const {
+    return this->height;
+}
+
 size_t Grid::mindex_to_index(const size_t  x, const size_t y) const {
     // Check if the precondition is satisfied
     if (x >= this->width or y >= this->height) {
@@ -10,7 +17,14 @@ size_t Grid::mindex_to_index(const size_t  x, const size_t y) const {
 }
 
 SDL_Color Grid::get_color_of_state(const State state) const {
+    // it is assumed that state_manager is initialized
     StateManager* sm = (this->state_manager).get();
+
+    // check if the given state exists
+    if (sm->get_state(state.value) != state) {
+        throw std::domain_error("Given state not found");
+    }
+
     return sm->get_color_of_state(state.value);
 }
 
@@ -67,12 +81,20 @@ void Grid::initialize_cells() {
 
 void Grid::initialize_state_manager(const std::vector<State>& states) {
     // Check if the states_manager has previously been initialized
-    if ((this->state_manager).get() != nullptr) {
+    if (this->is_state_manager()) {
         throw std::runtime_error("A StateManager object has already been constructed");
     }
 
     // Construct and assign the StateManager object
     this->state_manager = std::make_unique<StateManager>(states);
+}
+
+bool Grid::is_state_manager() const {
+    return ((this->state_manager).get() != nullptr);
+}
+
+State Grid::get_state_of_value(const Uint8 value) const {
+    return (this->state_manager)->get_state(value);
 }
 
 Grid::Grid(const size_t width, const size_t height, const size_t side_length) {
@@ -85,5 +107,15 @@ Grid::Grid(const size_t width, const size_t height, const size_t side_length) {
     this->width = width;
     this->height = height;
     this->side_length = side_length;
-    this->coord_system = std::make_unique<CoordSystem>(CoordSystem(this->width, this->height));
+    this->coord_system = std::make_unique<CoordSystem>(this->width, this->height);
+}
+
+Grid::Grid(const Grid& from) {
+    this->width = from.width;
+    this->height = from.height;
+    this->side_length = from.side_length;
+    this->coord_system = std::make_unique<CoordSystem>(*(from.coord_system).get());
+    this->state_manager = std::make_unique<StateManager>(*(from.state_manager).get());
+
+    this->cells = from.cells;
 }
