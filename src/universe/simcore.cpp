@@ -1,5 +1,21 @@
 #include "simcore.h"
 
+void SimCore::initialize_grid(const size_t width, const size_t height, const size_t side_length) {
+    if (grid != nullptr) {
+        throw std::runtime_error("Grid object already initialized");
+    }
+
+    grid = std::make_unique<Grid>(width, height, side_length);
+}
+
+void SimCore::initialize_state_manager(const std::vector<State>& states) {
+    if (grid == nullptr) {
+        throw std::logic_error("The associated Grid object is not yet initialized.");
+    }
+
+    grid->initialize_state_manager(states);
+}
+
 void SimCore::execute_step() const {
     // check if Grid is initialized.
     if (grid == nullptr) {

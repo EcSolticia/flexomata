@@ -29,8 +29,8 @@ public:
      * @brief Initialize the associated Grid object.
      * 
      * @note Is a wrapper around `Grid::Grid(const size_t width, const size_t height,
-     * const size_t side_length)`. Does not throw exceptions by itself, since the 
-     * Grid constructor handles them already.
+     * const size_t side_length)`. Does not throw exceptions regarding invalid integer inputs
+     * by itself, since the Grid constructor handles them already.
      * 
      * @throws std::runtime_error If the Grid object was already constructed.
      * @param width The number of columns of the Grid.
@@ -46,9 +46,7 @@ public:
      * , which itself is a wrapper around
      * `StateManager::StateManager(const std::vector<State>& states)`.
      * 
-     * @note Does not throw errors directly since the key function it is a wrapper around
-     * already does so.
-     * 
+     * @throws std::logic_error If the associated Grid object is not yet initialized.
      * @param states 
      */
     void initialize_state_manager(const std::vector<State>& states);
