@@ -2,6 +2,7 @@
 #include <stdexcept> // For error-handling
 #include <string>
 #include <filesystem>
+#include <memory>
 
 #include "ConfigLoader/configloader.h"
 
@@ -41,19 +42,28 @@ int main(int argc, char** argv) {
         const std::string config_path = Arguments::validate_arguments(argc, argv);
         Arguments::handle_file_existence(config_path);
 
-        ConfigLoader configloader = ConfigLoader(config_path);
+        std::unique_ptr<Grid> grid_ptr = std::make_unique<Grid>();
+
+        ConfigLoader configloader = ConfigLoader(config_path, grid_ptr.get());
 
         std::cout << std::endl;
 
     } catch (std::invalid_argument e) {
-        std::cerr << "invalid_argument: " << e.what() << std::endl;
+        std::cerr << "invalid_argument: " << e.what();
     } catch (std::runtime_error e) {
-        std::cerr << "runtime_error: " << e.what() << std::endl;
+        std::cerr << "runtime_error: " << e.what();
+    } catch (std::domain_error e) {
+        std::cerr << "domain_error: " << e.what();
+    } catch (std::out_of_range e) {
+        std::cerr << "out_of_range: " << e.what();
     } catch (std::exception e) {
-        std::cerr << "An unexpected error occured." << std::endl;
+        std::cerr << "An unexpected error occured.";
     } catch (...) {
-        std::cerr << "An unkown error occured." << std::endl;
+        std::cerr << "An unkown error occured.";
     }
+
+    std::cerr << std::endl;
+    std::cout << std::endl;
 
     return 0;
 }
