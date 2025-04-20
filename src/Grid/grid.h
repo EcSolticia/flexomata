@@ -12,18 +12,24 @@ class Grid {
         return (width && height);
     }
 
-public:
-    // Should be called using the post_init_run wrapper:
-    void set_data(const std::vector<size_t>& dummy_data);
-    void set_pixel(const size_t x, const size_t y, const size_t value);
+public:    
     size_t get_width() const;
     size_t get_height() const;
 
+
+    // Should be called using the post_init_run wrapper:
+    void set_data(const std::vector<size_t>& dummy_data);
+    
+    size_t get_pixel(const size_t x, const size_t y) const;
+    void set_pixel(const size_t x, const size_t y, const size_t value);
+    
+    void print_data() const;
+    
     template <typename Func, typename... Args>
     auto post_init_run(Func&& func, Args&&... args)
         -> decltype(std::forward<Func>(func)(std::forward<Args>(args)...)) {
         
-        if (!are_init_vars(this->width, this->height)) {
+        if (!are_init_vars(get_width(), get_height())) {
             throw std::runtime_error("Precondition failed: Grid not initialized.");
         }
 
@@ -37,7 +43,7 @@ public:
     auto pre_init_run(Func&& func, Args&&... args)
         -> decltype(std::forward<Func>(func)(std::forward<Args>(args)...)) {
         
-        if (are_init_vars(this->width, this->height)) {
+        if (are_init_vars(get_width(), get_height())) {
             throw std::runtime_error("Precondition failed: Grid already initialized.");
         }
 

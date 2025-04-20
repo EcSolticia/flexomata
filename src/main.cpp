@@ -50,9 +50,6 @@ int main(int argc, char** argv) {
         std::unique_ptr<Grid> grid_ptr = std::make_unique<Grid>();
 
         ConfigLoader configloader = ConfigLoader(config_path, grid_ptr.get());
-
-        std::cout << std::endl;
-
     } catch (std::invalid_argument e) {
         std::cerr << "invalid_argument: " << e.what();
     } catch (std::runtime_error e) {
@@ -69,7 +66,7 @@ int main(int argc, char** argv) {
         std::cerr << "An unkown error occured.";
     }
 
-    std::cerr << std::endl;
+    //std::cerr << std::endl;
     std::cout << std::endl;
 
     return 0;

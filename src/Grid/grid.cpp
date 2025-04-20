@@ -1,5 +1,29 @@
 #include "grid.h"
 
+size_t Grid::get_pixel(const size_t x, const size_t y) const {
+    const size_t idx = y * width + x;
+    return this->data[idx];
+}
+
+void Grid::print_data() const {
+    const size_t max_j = this->get_height();
+    const size_t max_i = this->get_width();
+    for (size_t j = 0; j < max_j; ++j) {
+        for (size_t i = 0; i < max_i; ++i) {
+            std::cout << this->get_pixel(i, j) << " ";
+        }
+        std::cout << "\n";
+    }
+}
+
+size_t Grid::get_width() const {
+    return this->width;
+}
+
+size_t Grid::get_height() const {
+    return this->height;
+}
+
 void Grid::set_data(const std::vector<size_t>& dummy_data) {
     size_t size = this->height * this->width;
 
