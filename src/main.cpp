@@ -4,6 +4,7 @@
 #include <filesystem>
 #include <memory>
 
+#include "Grid/grid.h"
 #include "ConfigLoader/configloader.h"
 
 namespace Arguments {

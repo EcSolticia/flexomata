@@ -1,4 +1,5 @@
 #include "configloader.h"
+#include "../Grid/grid.h"
 
 void ConfigLoader::load_grid_data(const std::string& stringset, Grid* grid_ptr) const {
     bool reading_line = false;

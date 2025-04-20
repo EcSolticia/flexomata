@@ -4,7 +4,7 @@
 #include <iostream>
 #include <sstream>
 
-#include "../Grid/grid.h"
+class Grid;
 
 class ConfigLoader {
 
