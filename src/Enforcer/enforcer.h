@@ -2,13 +2,14 @@
 #include <functional>
 #include <stdexcept>
 
+#include "../types.h"
+
 class Grid;
 
-typedef std::function<size_t(size_t, size_t)> RuleFunc;
-
 class Enforcer {
+
     Grid* grid_ptr;
-    RuleFunc rule;
+    FlexomataTypes::RuleFunc rule;
 
 public:
 
@@ -16,5 +17,5 @@ public:
 
     void enforce(size_t by_steps) const;
 
-    Enforcer(const RuleFunc& rule, Grid* grid_ptr);
+    Enforcer(const FlexomataTypes::RuleFunc& rule, Grid* grid_ptr);
 };

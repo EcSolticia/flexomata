@@ -68,5 +68,10 @@ public:
         return std::forward<Func>(func)(std::forward<Args>(args)...);
     }
 
+    /**
+     * Calling the const public members with these wrappers is not necessary when
+     * referring to it through FlexomataInterface. That class initializes it. 
+     */
+
     Grid();
 };

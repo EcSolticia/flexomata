@@ -24,7 +24,7 @@ void Enforcer::enforce(size_t by_steps) const {
     }
 }
 
-Enforcer::Enforcer(const RuleFunc& rule, Grid* grid_ptr) {
+Enforcer::Enforcer(const FlexomataTypes::RuleFunc& rule, Grid* grid_ptr) {
     if (!grid_ptr->is_initialized()) {
         throw std::runtime_error("An Enforcer object must be initialized with an already initialized Grid object.");
         /* Why?

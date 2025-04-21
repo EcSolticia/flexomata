@@ -1,50 +1,7 @@
 #include <iostream> // For terminal I/O
 #include <stdexcept> // For error-handling
-#include <string>
-#include <filesystem>
 
-#include "Grid/grid.h"
-#include "ConfigLoader/configloader.h"
-#include "Enforcer/enforcer.h"
-
-namespace Arguments {
-
-    const std::string get_first_argument(const int argc, char** argv) {
-        std::string config_path;
-
-        if (argc == 1) {
-            //throw std::invalid_argument("Expected a command-line argument.");
-            config_path = "config.txt";
-        }
-
-        // assume argv[1] to be the configuration file path
-        // current ignore additional arguments
-        if (argc > 2) {
-            std::cout << "Flexomata only accepts one command-line argument. The rest will be ignored.\n";
-        }
-
-        if (config_path.empty()) {
-            config_path = argv[1];
-        }
-
-        return config_path;
-    }
-
-    void handle_file_existence(const std::string& path) {
-        bool exists = std::filesystem::exists(path);
-        if (!exists) {
-            const std::string message = "No file exists at path " + path;
-            throw std::runtime_error(message);
-        }
-    }
-
-    const std::string get_valid_argument(const int argc, char** argv) {
-        const std::string config_path = get_first_argument(argc, argv);
-        handle_file_existence(config_path);
-        return config_path;
-    }
-
-}
+#include "flexomatainterface.h"
 
 int main(int argc, char** argv) {
 
