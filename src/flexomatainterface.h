@@ -22,6 +22,10 @@ namespace Arguments {
 
 }
 
+namespace FlexomataErrors {
+    void handle_exception(const std::exception& e);
+}
+
 class FlexomataInterface {
 
     std::unique_ptr<Grid> grid_ptr;

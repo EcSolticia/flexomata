@@ -1,5 +1,21 @@
 #include "flexomatainterface.h"
 
+void FlexomataErrors::handle_exception(const std::exception& e) {
+    if (typeid(e) == typeid(std::invalid_argument)) {
+        std::cerr << "invalid_argument: " << e.what() << '\n';
+    } else if (typeid(e) == typeid(std::domain_error)) {
+        std::cerr << "domain_error: " << e.what() << '\n';
+    } else if (typeid(e) == typeid(std::out_of_range)) {
+        std::cerr << "out_of_range: " << e.what() << '\n';
+    } else if (typeid(e) == typeid(std::logic_error)) {
+        std::cerr << "logic_error: " << e.what() << '\n';
+    } else if (typeid(e) == typeid(std::runtime_error)) {
+        std::cerr << "runtime_error: " << e.what() << '\n';
+    } else {
+        std::cerr << "std::exception: " << e.what() << '\n';
+    }
+}
+
 const std::string Arguments::get_first_argument(const int argc, char** argv) {
     std::string config_path;
 
