@@ -9,6 +9,54 @@ size_t Grid::get_pixel(const size_t x, const size_t y) const {
     return this->data[idx];
 }
 
+size_t Grid::get_neighbor(const size_t x, const size_t y, enum Direction dir) const {
+    const size_t h = get_height();
+    const size_t w = get_width();
+
+    size_t new_x = x;
+    size_t new_y = y;
+
+    switch (dir) {
+        case TOP_LEFT:
+            new_x = (x + w - 1) % w;
+            new_y = (y + h - 1) % h;
+            break;
+        case TOP:
+            new_y = (y + h - 1) % h;
+            break;
+        case TOP_RIGHT:
+            new_x = (x + 1) % w;
+            new_y = (y + h - 1) % h;
+            break;
+        case LEFT:
+            new_x = (x + w - 1) % w;
+            break;
+        case RIGHT:
+            new_x = (x + 1) % w;
+            break;
+        case BOTTOM_LEFT:
+            new_x = (x + w - 1) % w;
+            new_y = (y + 1) % h;
+            break;
+        case BOTTOM:
+            new_y = (y + 1) % h;
+            break;
+        case BOTTOM_RIGHT:
+            new_y = (y + 1) % h;
+            new_x = (x + 1) % w;
+            break;
+    }
+    return get_pixel(new_x, new_y);
+}
+
+size_t Grid::get_neighbor_count(const size_t x, const size_t y, const size_t of_state) const {
+    size_t count = 0;
+    for (size_t i = 0; i < 8; ++i) {
+        count += (get_neighbor(x, y, static_cast<Direction>(i)) == of_state);
+    }
+    return count;
+}
+
 void Grid::print_data() const {
     const size_t max_j = this->get_height();
     const size_t max_i = this->get_width();
