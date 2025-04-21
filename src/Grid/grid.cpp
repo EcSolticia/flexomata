@@ -1,5 +1,9 @@
 #include "grid.h"
 
+bool Grid::is_initialized() const {
+    return are_init_vars(this->get_width(), this->get_height());
+}
+
 size_t Grid::get_pixel(const size_t x, const size_t y) const {
     const size_t idx = y * width + x;
     return this->data[idx];
@@ -54,6 +58,10 @@ void Grid::initialize_grid(const size_t width, const size_t height) {
     std::fill(this->data.begin(), this->data.end(), 0);
 }
 
+/* Not directly initialized to simplify the process of
+** passing as a pointer to a config loader object, which
+** is expected to handle initialization.
+*/
 Grid::Grid() {
     this->width = 0;
     this->height = 0;

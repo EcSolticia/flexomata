@@ -6,6 +6,7 @@
 
 #include "Grid/grid.h"
 #include "ConfigLoader/configloader.h"
+#include "Enforcer/enforcer.h"
 
 namespace Arguments {
 
@@ -51,6 +52,16 @@ int main(int argc, char** argv) {
         std::unique_ptr<Grid> grid_ptr = std::make_unique<Grid>();
 
         ConfigLoader configloader = ConfigLoader(config_path, grid_ptr.get());
+
+        RuleFunc rule = [&](size_t x, size_t y) -> size_t {
+            return (grid_ptr.get()->get_pixel(x, y) + 1);
+        };
+
+        Enforcer enf = Enforcer(rule, grid_ptr.get());
+        enf.enforce(5);
+
+        grid_ptr.get()->print_data();
+
     } catch (std::invalid_argument e) {
         std::cerr << "invalid_argument: " << e.what();
     } catch (std::runtime_error e) {

@@ -14,6 +14,8 @@ class Grid {
     }
 
 public:    
+    bool is_initialized() const;
+
     size_t get_width() const;
     size_t get_height() const;
 
@@ -30,7 +32,7 @@ public:
     auto post_init_run(Func&& func, Args&&... args)
         -> decltype(std::forward<Func>(func)(std::forward<Args>(args)...)) {
         
-        if (!are_init_vars(get_width(), get_height())) {
+        if (!is_initialized()) {
             throw std::runtime_error("Precondition failed: Grid not initialized.");
         }
 
@@ -44,7 +46,7 @@ public:
     auto pre_init_run(Func&& func, Args&&... args)
         -> decltype(std::forward<Func>(func)(std::forward<Args>(args)...)) {
         
-        if (are_init_vars(get_width(), get_height())) {
+        if (is_initialized()) {
             throw std::runtime_error("Precondition failed: Grid already initialized.");
         }
 
