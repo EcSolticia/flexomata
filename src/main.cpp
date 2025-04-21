@@ -10,7 +10,7 @@
 
 namespace Arguments {
 
-    std::string validate_arguments(const int argc, char** argv) {
+    const std::string get_first_argument(const int argc, char** argv) {
         std::string config_path;
 
         if (argc == 1) {
@@ -39,6 +39,12 @@ namespace Arguments {
         }
     }
 
+    const std::string get_valid_argument(const int argc, char** argv) {
+        const std::string config_path = get_first_argument(argc, argv);
+        handle_file_existence(config_path);
+        return config_path;
+    }
+
 }
 
 int main(int argc, char** argv) {
@@ -46,8 +52,7 @@ int main(int argc, char** argv) {
 
     try {
 
-        const std::string config_path = Arguments::validate_arguments(argc, argv);
-        Arguments::handle_file_existence(config_path);
+        const std::string config_path = Arguments::get_valid_argument(argc, argv);
 
         std::unique_ptr<Grid> grid_ptr = std::make_unique<Grid>();
 
@@ -58,7 +63,7 @@ int main(int argc, char** argv) {
         };
 
         Enforcer enf = Enforcer(rule, grid_ptr.get());
-        enf.enforce(5);
+        enf.enforce(4);
 
         grid_ptr.get()->print_data();
 
