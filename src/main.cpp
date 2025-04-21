@@ -2,7 +2,6 @@
 #include <stdexcept> // For error-handling
 #include <string>
 #include <filesystem>
-#include <memory>
 
 #include "Grid/grid.h"
 #include "ConfigLoader/configloader.h"

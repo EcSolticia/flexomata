@@ -5,11 +5,15 @@ void Enforcer::enforce_once() const {
     const size_t max_j = grid_ptr->get_height();
     const size_t max_i = grid_ptr->get_width();
 
+    Grid grid_buffer = *grid_ptr;
+
     for (size_t j = 0; j < max_j; ++j) {
         for (size_t i = 0; i < max_i; ++i) {
-            grid_ptr->set_pixel(i, j, rule(i, j));
+            grid_buffer.set_pixel(i, j, rule(i, j));
         }
     }
+
+    *grid_ptr = grid_buffer;
 }
 
 void Enforcer::enforce(size_t by_steps) const {
