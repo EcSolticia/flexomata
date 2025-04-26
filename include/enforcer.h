@@ -2,7 +2,7 @@
 #include <functional>
 #include <stdexcept>
 
-#include "../types.h"
+#include "types.h"
 
 class Grid;
 

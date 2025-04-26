@@ -1,5 +1,5 @@
 #include "enforcer.h"
-#include "../Grid/grid.h"
+#include "grid.h"
 
 void Enforcer::enforce_once() const {
     const size_t max_j = grid_ptr->get_height();

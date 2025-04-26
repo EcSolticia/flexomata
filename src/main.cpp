@@ -1,4 +1,4 @@
-#include "flexomatainterface.h"
+#include "flexomata.h"
 
 int main(int argc, char** argv) {
 

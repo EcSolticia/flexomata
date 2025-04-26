@@ -8,9 +8,9 @@
 
 #include "types.h"
 
-#include "Grid/grid.h"
-#include "Enforcer/enforcer.h"
-#include "ConfigLoader/configloader.h"
+#include "grid.h"
+#include "enforcer.h"
+#include "configloader.h"
 
 namespace Arguments {
 

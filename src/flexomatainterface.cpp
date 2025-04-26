@@ -1,4 +1,4 @@
-#include "flexomatainterface.h"
+#include "flexomata.h"
 
 void FlexomataErrors::handle_exception(const std::exception& e) {
     if (typeid(e) == typeid(std::invalid_argument)) {
