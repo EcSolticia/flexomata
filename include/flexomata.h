@@ -38,4 +38,6 @@ public:
     void attach_rule(const FlexomataTypes::RuleFunc& rule);
 
     FlexomataInterface(const int argc, char** argv);
+
+    FlexomataInterface(const std::string& config_text);
 };

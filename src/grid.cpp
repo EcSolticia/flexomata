@@ -60,6 +60,11 @@ size_t Grid::get_neighbor_count(const size_t x, const size_t y, const size_t of_
 void Grid::print_data() const {
     const size_t max_j = this->get_height();
     const size_t max_i = this->get_width();
+
+    if (!are_init_vars(max_i, max_j)) {
+        throw std::runtime_error("Grid not initialized.");
+    }
+
     for (size_t j = 0; j < max_j; ++j) {
         for (size_t i = 0; i < max_i; ++i) {
             std::cout << this->get_pixel(i, j) << " ";

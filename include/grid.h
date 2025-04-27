@@ -30,6 +30,7 @@ public:
     size_t get_width() const;
     size_t get_height() const;
 
+    void print_data() const;
 
     // Should be called using the post_init_run wrapper:
     void set_data(const std::vector<size_t>& dummy_data);
@@ -40,8 +41,6 @@ public:
     size_t get_neighbor(const size_t x, const size_t y, enum Direction dir) const;
     
     size_t get_neighbor_count(const size_t x, const size_t y, const size_t of_state) const;
-
-    void print_data() const;
     
     template <typename Func, typename... Args>
     auto post_init_run(Func&& func, Args&&... args)

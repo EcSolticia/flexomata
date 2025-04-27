@@ -66,9 +66,12 @@ void FlexomataInterface::attach_rule(const FlexomataTypes::RuleFunc& rule) {
 }
 
 FlexomataInterface::FlexomataInterface(const int argc, char** argv) {
-    std::string config_path = Arguments::get_valid_argument(argc, argv);
-
     this->grid_ptr = std::make_unique<Grid>();
 
-    ConfigLoader configloader = ConfigLoader(config_path, grid_ptr.get());
+    std::string config_path = Arguments::get_valid_argument(argc, argv);
+    ConfigLoader configloader = ConfigLoader(config_path, grid_ptr.get(), ConfigLoader::construct_from_path{});
+}
+FlexomataInterface::FlexomataInterface(const std::string& config_text) {
+    this->grid_ptr = std::make_unique<Grid>();
+    ConfigLoader configloader = ConfigLoader(config_text, grid_ptr.get(), ConfigLoader::construct_from_text{});
 }

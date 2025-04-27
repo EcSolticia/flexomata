@@ -59,7 +59,7 @@ void ConfigLoader::load_grid_data(const std::string& stringset, Grid* grid_ptr) 
 
 }
 
-ConfigLoader::ConfigLoader(const std::string& config_path, Grid* grid_ptr) {
+ConfigLoader::ConfigLoader(const std::string& config_path, Grid* grid_ptr, construct_from_path) {
     std::string config_file_text;
 
     std::ifstream config_file(config_path);
@@ -71,4 +71,8 @@ ConfigLoader::ConfigLoader(const std::string& config_path, Grid* grid_ptr) {
     }
 
     this->load_grid_data(config_file_text, grid_ptr);
+}
+
+ConfigLoader::ConfigLoader(const std::string& config_text, Grid* grid_ptr, construct_from_text) {
+    this->load_grid_data(config_text, grid_ptr);
 }
