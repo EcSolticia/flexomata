@@ -12,7 +12,7 @@
 #include "enforcer.h"
 #include "configloader.h"
 
-namespace Arguments {
+namespace FlexomataArguments {
 
     const std::string get_first_argument(const int argc, char** argv);
 

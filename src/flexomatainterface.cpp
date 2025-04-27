@@ -16,7 +16,7 @@ void FlexomataErrors::handle_exception(const std::exception& e) {
     }
 }
 
-const std::string Arguments::get_first_argument(const int argc, char** argv) {
+const std::string FlexomataArguments::get_first_argument(const int argc, char** argv) {
     std::string config_path;
 
         if (argc == 1) {
@@ -24,7 +24,7 @@ const std::string Arguments::get_first_argument(const int argc, char** argv) {
         }
 
         // assume argv[1] to be the configuration file path
-        // currently ignores additional arguments
+        // currently ignores additional FlexomataArguments
         if (argc > 2) {
             std::cout << "Flexomata only accepts one command-line argument. The rest will be ignored.\n";
         }
@@ -36,14 +36,14 @@ const std::string Arguments::get_first_argument(const int argc, char** argv) {
         return config_path;
 }
 
-void Arguments::handle_file_existence(const std::string& path) {
+void FlexomataArguments::handle_file_existence(const std::string& path) {
     bool exists = std::filesystem::exists(path);
     if (!exists) {
         throw std::runtime_error("No file exists at path " + path);
     }
 }
 
-const std::string Arguments::get_valid_argument(const int argc, char** argv) {
+const std::string FlexomataArguments::get_valid_argument(const int argc, char** argv) {
     const std::string config_path = get_first_argument(argc, argv);
     handle_file_existence(config_path);
     return config_path;
@@ -67,7 +67,7 @@ void FlexomataInterface::attach_rule(const FlexomataTypes::RuleFunc& rule) {
 FlexomataInterface::FlexomataInterface(const int argc, char** argv) {
     this->grid_ptr = std::make_unique<Grid>();
 
-    std::string config_path = Arguments::get_valid_argument(argc, argv);
+    std::string config_path = FlexomataArguments::get_valid_argument(argc, argv);
     ConfigLoader configloader = ConfigLoader(config_path, grid_ptr.get(), ConfigLoader::construct_from_path{});
 }
 FlexomataInterface::FlexomataInterface(const std::string& config_text) {
