@@ -33,7 +33,7 @@ void Enforcer::enforce(size_t by_steps) const {
 
 Enforcer::Enforcer(const FlexomataTypes::RuleFunc& rule, Grid* grid_ptr) {
     if (!grid_ptr->is_initialized()) {
-        throw std::runtime_error("An Enforcer object must be initialized with an already initialized Grid object.");
+        throw std::runtime_error("Grid not initialized.");
         /* Why?
         ** To avoid having checks each time the member functions requiring that
         ** the Grid object is initialized are called.

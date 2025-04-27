@@ -33,7 +33,7 @@ class FlexomataInterface {
 
 public:
     const Grid* get_grid() const;
-    Enforcer* get_enforcer() const;
+    const Enforcer* get_enforcer() const;
 
     void attach_rule(const FlexomataTypes::RuleFunc& rule);
 

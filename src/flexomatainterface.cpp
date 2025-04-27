@@ -39,8 +39,7 @@ const std::string Arguments::get_first_argument(const int argc, char** argv) {
 void Arguments::handle_file_existence(const std::string& path) {
     bool exists = std::filesystem::exists(path);
     if (!exists) {
-        const std::string message = "No file exists at path " + path;
-        throw std::runtime_error(message);
+        throw std::runtime_error("No file exists at path " + path);
     }
 }
 
@@ -54,7 +53,7 @@ const Grid* FlexomataInterface::get_grid() const {
     return this->grid_ptr.get();
 }
 
-Enforcer* FlexomataInterface::get_enforcer() const {
+const Enforcer* FlexomataInterface::get_enforcer() const {
     if (!this->enforcer_ptr) {
         throw std::runtime_error("No rule attached to the simulation interface.");
     }

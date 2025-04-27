@@ -47,7 +47,7 @@ public:
         -> decltype(std::forward<Func>(func)(std::forward<Args>(args)...)) {
         
         if (!is_initialized()) {
-            throw std::runtime_error("Precondition failed: Grid not initialized.");
+            throw std::runtime_error("Grid not initialized.");
         }
 
         return std::forward<Func>(func)(std::forward<Args>(args)...);
@@ -61,7 +61,7 @@ public:
         -> decltype(std::forward<Func>(func)(std::forward<Args>(args)...)) {
         
         if (is_initialized()) {
-            throw std::runtime_error("Precondition failed: Grid already initialized.");
+            throw std::runtime_error("Grid already initialized.");
         }
 
         return std::forward<Func>(func)(std::forward<Args>(args)...);
