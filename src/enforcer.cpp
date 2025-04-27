@@ -9,7 +9,12 @@ void Enforcer::enforce_once() const {
 
     for (size_t j = 0; j < max_j; ++j) {
         for (size_t i = 0; i < max_i; ++i) {
-            grid_buffer.set_pixel(i, j, rule(i, j));
+            
+            grid_buffer.post_init_run([&](){
+                grid_buffer.set_pixel(i, j, rule(i, j));
+            });
+            
+            //grid_buffer.set_pixel(i, j, rule(i, j));
         }
     }
 
