@@ -1,0 +1,57 @@
+// https://en.wikipedia.org/wiki/Rule_30
+
+#include "flexomata.h"
+
+namespace Rule30Helpers {
+    const char state_to_char(const size_t state) {
+        return (state == 1) ? '0' : '.';
+    }
+
+    void print_line(const std::vector<size_t>& data) {
+        std::string line;
+        for (size_t pixel: data) {
+            line = line + state_to_char(pixel);
+        }
+
+        std::cout << line << std::endl;
+    }
+}
+
+int main() {
+
+    std::string config_text = "GRID\n"
+                              "0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0\nEND_GRID";
+
+
+    try {
+        SimulationScene sim = SimulationScene(config_text);
+
+        const Grid* grid_ptr = sim.get_grid();
+
+        FlexomataTypes::RuleFunc rule30 = [grid_ptr](size_t x, size_t y) -> size_t {
+            const size_t left = grid_ptr->get_neighbor(x, y, Grid::LEFT);
+            const size_t right = grid_ptr->get_neighbor(x, y, Grid::RIGHT);
+            const size_t center = grid_ptr->get_pixel(x, y);
+
+            return (left == !(right || center));
+        };
+
+        sim.attach_rule(rule30);
+
+        const Enforcer* enf = sim.get_enforcer();
+
+        int steps_left = 14;
+
+        while (--steps_left >= 0) {
+
+            Rule30Helpers::print_line(grid_ptr->get_data());
+            
+            enf->enforce_once();
+        }
+        
+    } catch (const std::exception& e) {
+        FlexomataErrors::handle_exception(e);
+    }
+
+    return 0;
+}

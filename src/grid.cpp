@@ -73,6 +73,10 @@ void Grid::print_data() const {
     }
 }
 
+const std::vector<size_t> Grid::get_data() const {
+    return this->data;
+}
+
 size_t Grid::get_width() const {
     return this->width;
 }

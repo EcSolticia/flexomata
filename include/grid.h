@@ -31,6 +31,7 @@ public:
     size_t get_height() const;
 
     void print_data() const;
+    const std::vector<size_t> get_data() const;
 
     // Should be called using the post_init_run wrapper:
     void set_data(const std::vector<size_t>& dummy_data);
