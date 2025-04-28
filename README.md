@@ -81,7 +81,9 @@ project(GameOfLife CXX)
 
 add_executable(${PROJECT_NAME} main.cpp)
 
-target_include_directories(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/path/to/include)
+target_include_directories(${PROJECT_NAME} 
+    PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/path/to/include
+)
 
 target_link_libraries(${PROJECT_NAME} ${CMAKE_CURRENT_SOURCE_DIR}/path/to/lib/libFlexomata.a)
 
