@@ -50,27 +50,27 @@ const std::string FlexomataArguments::get_valid_argument(const int argc, char** 
 }
 
 const Grid* SimulationScene::get_grid() const {
-    return this->grid_ptr.get();
+    return &this->grid;
 }
 
 const Enforcer* SimulationScene::get_enforcer() const {
-    if (!this->enforcer_ptr) {
+    if (!this->enforcer.has_value()) {
         throw std::runtime_error("No rule attached to the simulation interface.");
     }
-    return this->enforcer_ptr.get();
+    return &this->enforcer.value();
 }
 
 void SimulationScene::attach_rule(const FlexomataTypes::RuleFunc& rule) {
-    this->enforcer_ptr = std::make_unique<Enforcer>(rule, this->grid_ptr.get());
+    this->enforcer = Enforcer(rule, &this->grid);
 }
 
 SimulationScene::SimulationScene(const int argc, char** argv) {
-    this->grid_ptr = std::make_unique<Grid>();
+    this->grid = Grid();
 
     std::string config_path = FlexomataArguments::get_valid_argument(argc, argv);
-    ConfigLoader configloader = ConfigLoader(config_path, grid_ptr.get(), ConfigLoader::construct_from_path{});
+    ConfigLoader configloader = ConfigLoader(config_path, &this->grid, ConfigLoader::construct_from_path{});
 }
 SimulationScene::SimulationScene(const std::string& config_text) {
-    this->grid_ptr = std::make_unique<Grid>();
-    ConfigLoader configloader = ConfigLoader(config_text, grid_ptr.get(), ConfigLoader::construct_from_text{});
+    this->grid = Grid();
+    ConfigLoader configloader = ConfigLoader(config_text, &this->grid, ConfigLoader::construct_from_text{});
 }

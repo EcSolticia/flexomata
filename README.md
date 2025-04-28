@@ -183,7 +183,7 @@ In the absence of the argument, Flexomata looks for `config.txt` in the current 
 Constructor to initialize the scene using initial configuration specified in a string.
 
 #### Notes
-- `SimulationScene` owns and manages the memory for the associated `Enforcer` and `Grid` objects through smart pointers. Practically, this means that you do not have to worry about freeing their memory separately.
+- `SimulationScene` owns and manages the memory for the associated stack-allocated `Enforcer` and `Grid` objects. Practically, this means that you do not have to worry about freeing their memory separately.
 - To use Flexomata through the `SimulationScene` class, you have to include and only include `flexomata.h` from the include directory. 
 - It may be possible to achieve a lower-level control over the behavior of the simulation by accessing the other classes more directly, but that is not tested. Furthermore, this is not something Flexomata is designed for and around, and hence is not documented as of now.
 

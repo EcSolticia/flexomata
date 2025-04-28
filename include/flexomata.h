@@ -5,6 +5,7 @@
 #include <string>
 #include <filesystem>
 #include <memory>
+#include <optional>
 
 #include "types.h"
 
@@ -28,8 +29,8 @@ namespace FlexomataErrors {
 
 class SimulationScene {
 
-    std::unique_ptr<Grid> grid_ptr;
-    std::unique_ptr<Enforcer> enforcer_ptr;
+    Grid grid;
+    std::optional<Enforcer> enforcer;
 
 public:
     const Grid* get_grid() const;
