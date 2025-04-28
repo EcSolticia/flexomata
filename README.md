@@ -116,7 +116,7 @@ int main() {
     try {
 
         // Create the entry point of the simulation and the interface
-        FlexomataInterface sim = FlexomataInterface(config_text);
+        SimulationScene sim = SimulationScene(config_text);
 
         // Access the Grid object managed by the simulation handler, read-only
         const Grid* grid_ptr = sim.get_grid();
@@ -164,8 +164,8 @@ int main() {
 
 # Usage Documentation
 ## Accessible Classes and Namespaces
-### `FlexomataInterface` (`flexomata.h`)
-Creates a separate "universe" for a particular simulation, with predefined Grid dimensions and an initial configuration. Is the entry point for all pertinent simulation functionalities. Other accessible classes can only be accessed through an instance of `FlexomataInterface`.
+### `SimulationScene` (`flexomata.h`)
+Creates a separate "scene" for a particular simulation, with predefined Grid dimensions and an initial configuration. Is the entry point for all pertinent simulation functionalities. Other accessible classes can only be accessed through an instance of `SimulationScene`.
 #### Accessible Member Functions
 - `const Grid* get_grid() const`:
 Get access to the associated `Grid` object.
@@ -173,16 +173,16 @@ Get access to the associated `Grid` object.
 Get access to the associated `Enforcer` object. Throws an exception if no rule is attached.
 - `void attach_rule(const FlexomataTypes::RuleFunc& rule)`:
 Attach a rule to the simulation interface. Creates an `Enforcer` object using the associated rule. Rule can be changed any number of times at run-time.
-- `FlexomataInterface(const int argc, char** argv)`:
-Constructor to initialize the simulation handler using initial configuration specified in a file from the terminal, specifically the second argument. Example: `./FlexomataApp path/to/config/file.txt`.
+- `SimulationScene(const int argc, char** argv)`:
+Constructor to initialize the scene using initial configuration specified in a file from the terminal, specifically the second argument. Example: `./FlexomataApp path/to/config/file.txt`.
 
 In the absence of the argument, Flexomata looks for `config.txt` in the current working directory, and if it exists, attempts to load the initial configuration from that.
-- `FlexomataInterface(const std::string& config_text)`: 
-Constructor to initialize the simulation handler using initial configuration specified in a string.
+- `SimulationScene(const std::string& config_text)`: 
+Constructor to initialize the scene using initial configuration specified in a string.
 
 #### Notes
-- `FlexomataInterface` owns and manages the memory for the associated `Enforcer` and `Grid` objects through smart pointers. Practically, this means that you do not have to worry about freeing their memory separately.
-- To use Flexomata through the `FlexomataInterface` class, you have to include and only include `flexomata.h` from the include directory. 
+- `SimulationScene` owns and manages the memory for the associated `Enforcer` and `Grid` objects through smart pointers. Practically, this means that you do not have to worry about freeing their memory separately.
+- To use Flexomata through the `SimulationScene` class, you have to include and only include `flexomata.h` from the include directory. 
 - It may be possible to achieve a lower-level control over the behavior of the simulation by accessing the other classes more directly, but that is not tested. Furthermore, this is not something Flexomata is designed for and around, and hence is not documented as of now.
 
 ### `FlexomataTypes` (`types.h`)
@@ -244,7 +244,7 @@ Apply the rule to the grid once.
 Apply the rule to the grid a specific number of times.
 
 ## Configuration Parsing
-Each instance of `FlexomataInterface`, and hence each simulation instance, must be initialized with a configuration string. The configurations string is either passed on explicitly, or read from a file. As of now, the configuration only specifies the initial state of the grid. That is to say, it specifies the value or state of each cell in the grid, represented as a non-negative integer.
+Each instance of `SimulationScene`, and hence each simulation instance, must be initialized with a configuration string. The configurations string is either passed on explicitly, or read from a file. As of now, the configuration only specifies the initial state of the grid. That is to say, it specifies the value or state of each cell in the grid, represented as a non-negative integer.
 
 The block specifying the grid configuration must begin with the `GRID` keyword, and only that keyword, in a single line. It must be followed by rows of non-negative integers separated by whitespace. Each row must have the same number of integers to maintain consistency.
 

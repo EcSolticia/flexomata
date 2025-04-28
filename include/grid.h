@@ -69,7 +69,7 @@ public:
 
     /**
      * Calling the const public members with these wrappers is not necessary when
-     * referring to it through FlexomataInterface. That class initializes it. 
+     * referring to it through SimulationScene. That class initializes it. 
      */
 
     Grid();

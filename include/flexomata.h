@@ -26,7 +26,7 @@ namespace FlexomataErrors {
     void handle_exception(const std::exception& e);
 }
 
-class FlexomataInterface {
+class SimulationScene {
 
     std::unique_ptr<Grid> grid_ptr;
     std::unique_ptr<Enforcer> enforcer_ptr;
@@ -37,7 +37,7 @@ public:
 
     void attach_rule(const FlexomataTypes::RuleFunc& rule);
 
-    FlexomataInterface(const int argc, char** argv);
+    SimulationScene(const int argc, char** argv);
 
-    FlexomataInterface(const std::string& config_text);
+    SimulationScene(const std::string& config_text);
 };
