@@ -53,5 +53,8 @@ int main() {
         FlexomataErrors::handle_exception(e);
     }
 
+    // Optional for interactive shells. Ensures that the console window on Windows does not close immediately.
+    std::cin.get();
+
     return 0;
 }

@@ -2,16 +2,26 @@
 
 Flexomata is a simple framework for handling cellular automata simulation in C++ as a static library. The user may provide a "rule function" to operate per each grid cell along with an initial configuration. Flexomata can thereafter apply the rule to each cell and offers access to the evolved state of the grid.
 
-# Installation and Usage
-## Build Instructions (Linux/MacOS/Unix-like systems using Make)
+# Installation
+
+## Supported Platforms
+- Linux / MacOS / Unix-like systems (Using CMake + Make).
+- Microsoft Windows (Using CMake + Make with MinGW).
+
+## Build Instructions
 ### Prerequisites
 Ensure that the following programs are installed on your system:
 - CMake (version 3.10 or above).
-- A C++ compiler that supports C++17 (For example, g++11 or above).
 - The Make build system.
+    - Natively available on Linux/MacOS.
+    - On Windows, use MinGW.
+- A C++ compiler that supports C++17 (For example, g++11 or above).
+    - Natively available on Linux/MacOS.
+    - On Windows, use MinGW.
 - Git (to clone the repository).
 
-### Commands
+### Commands (Linux/MacOS)
+If you installed `git`, `cmake`, `make`, and `g++` using a dedicated package manager, they are likely already added to `PATH`, and the associated commands should be accessible from your terminal. Otherwise, you might need some manual setup. 
 ```
 git clone https://github.com/EcSolticia/Flexomata.git
 cd Flexomata
@@ -21,7 +31,18 @@ cmake ..
 make
 ```
 
-## Hello, Flexomata! (Linux/MacOS/Unix-like systems using CMake)
+### Commands (Windows)
+Open a terminal emulator or command prompt where `git`, `cmake`, `make` (via MinGW), and `g++` (via MinGW) are accessible. You may have to add the appropriate MinGW `bin` directory to your system's `Path` environment variable.
+```
+git clone https://github.com/EcSolticia/Flexomata.git
+cd Flexomata
+mkdir build
+cd build
+cmake -G "MinGW Makefiles" ..
+make
+```
+
+# Getting Started:  Hello, Flexomata!
 A successful execution of the build instructions is expected to yield `libFlexomata.a` in directory `Flexomata/build`. To use the library in a project using CMake, you have to specify Flexomata's include directory and link your project to the generated library. 
 
 The following portion of this section will exemplify the process through creating a simulation of Conway's Game of Life using Flexomata.
@@ -161,6 +182,11 @@ int main() {
         // Self-explanatory: handle exceptions
         FlexomataErrors::handle_exception(e);
     }
+
+    // Optional for interactive shells. Ensures that the console window on Windows does not close immediately.
+    std::cin.get();
+
+    return 0;
 }
 ```
 
@@ -275,3 +301,6 @@ GRID
 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
 END_GRID
 ```
+
+# License
+Flexomata is distributed under the [MIT License](https://github.com/EcSolticia/Flexomata/blob/main/LICENSE).
