@@ -190,6 +190,28 @@ int main() {
 }
 ```
 
+### 4. Compile and Run!
+In your project directory, create a new directory named `build`, change directory to `build` (`cd build`), and run
+```
+cmake ..
+```
+on Linux/MacOS to generate the Makefiles, and
+```
+cmake -G "MinGW Makefiles" ..
+```
+On Windows to generate the MinGW Makefiles.
+
+Finally, run
+```
+make
+```
+
+In the `build` directory, which should link the library and compile your executable.
+
+You may wish to run the executable to see if it behaves as expected.
+
+> The example program we built here takes a "command" each step. Any input other than "quit" will simulate and present the next step of the simulation. Otherwise, it quits.
+
 # Usage Documentation
 ## Accessible Classes and Namespaces
 ### `SimulationScene` (`flexomata.h`)
