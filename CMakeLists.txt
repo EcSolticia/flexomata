@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-Project(Flexomata CXX)
+project(Flexomata CXX)
 
 add_library(${PROJECT_NAME} STATIC
     src/flexomatainterface.cpp

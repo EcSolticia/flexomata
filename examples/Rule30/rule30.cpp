@@ -24,7 +24,7 @@ int main() {
 
 
     try {
-        SimulationScene sim = SimulationScene(config_text);
+        SimulationScene sim = SimulationScene(config_text, SimulationScene::construct_from_text{});
 
         const Grid* grid_ptr = sim.get_grid();
 

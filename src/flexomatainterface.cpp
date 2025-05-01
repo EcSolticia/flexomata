@@ -70,7 +70,13 @@ SimulationScene::SimulationScene(const int argc, char** argv) {
     std::string config_path = FlexomataArguments::get_valid_argument(argc, argv);
     ConfigLoader configloader = ConfigLoader(config_path, &this->grid, ConfigLoader::construct_from_path{});
 }
-SimulationScene::SimulationScene(const std::string& config_text) {
+
+SimulationScene::SimulationScene(const std::string& config_text, construct_from_text) {
     this->grid = Grid();
     ConfigLoader configloader = ConfigLoader(config_text, &this->grid, ConfigLoader::construct_from_text{});
+}
+
+SimulationScene::SimulationScene(const std::string& config_path, construct_from_predefined_path) {
+    this->grid = Grid();
+    ConfigLoader configloader = ConfigLoader(config_path, &this->grid, ConfigLoader::construct_from_path{});
 }

@@ -40,5 +40,9 @@ public:
 
     SimulationScene(const int argc, char** argv);
 
-    SimulationScene(const std::string& config_text);
+    struct construct_from_text{};
+    struct construct_from_predefined_path{};
+
+    SimulationScene(const std::string& config_text, construct_from_text);
+    SimulationScene(const std::string& config_path, construct_from_predefined_path);
 };

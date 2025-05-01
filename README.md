@@ -139,7 +139,7 @@ int main() {
     try {
 
         // Create the entry point of the simulation and the interface
-        SimulationScene sim = SimulationScene(config_text);
+        SimulationScene sim = SimulationScene(config_text, SimulationScene::construct_from_text{});
 
         // Access the Grid object managed by the simulation handler, read-only
         const Grid* grid_ptr = sim.get_grid();
@@ -163,17 +163,10 @@ int main() {
         const Enforcer* enforcer_ptr = sim.get_enforcer();
 
         while (true) {
-            std::string a;
+            // Do not execute the following blocks until the return key is pressed
+            std::cin.get();
         
-            std::cout << "command: ";
-            std::cin >> a;
-
-            // Quit the program if the input is "quit"
-            if (a == "quit") {
-                break;
-            }
-        
-            // Simulate and present next step if otherwise
+            // Simulate and present next step
             enforcer_ptr->enforce_once();
             grid_ptr->print_data();
         }
@@ -183,14 +176,11 @@ int main() {
         FlexomataErrors::handle_exception(e);
     }
 
-    // Optional for interactive shells. Ensures that the console window on Windows does not close immediately.
-    std::cin.get();
-
     return 0;
 }
 ```
 
-### 4. Compile and Run!
+### 4. Compile your executable and run!
 In your project directory, create a new directory named `build`, change directory to `build` (`cd build`), and run
 ```
 cmake ..
@@ -205,12 +195,11 @@ Finally, run
 ```
 make
 ```
-
 In the `build` directory, which should link the library and compile your executable.
 
 You may wish to run the executable to see if it behaves as expected.
 
-> The example program we built here takes a "command" each step. Any input other than "quit" will simulate and present the next step of the simulation. Otherwise, it quits.
+> The program we built here simulates Conway's Game of Life on our initial configuration Grid and pattern. Press enter to simulate the next step. Pressing Ctrl + C, or a similar key combination depending on your terminal and platform can be used to terminate the program.
 
 # Usage Documentation
 ## Accessible Classes and Namespaces

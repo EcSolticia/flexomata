@@ -21,7 +21,7 @@ int main() {
     try {
 
         // Create the entry point of the simulation and the interface
-        SimulationScene sim = SimulationScene(config_text);
+        SimulationScene sim = SimulationScene(config_text, SimulationScene::construct_from_text{});
 
         // Access the Grid object managed by the simulation handler, read-only
         const Grid* grid_ptr = sim.get_grid();
@@ -45,15 +45,7 @@ int main() {
         const Enforcer* enforcer_ptr = sim.get_enforcer();
 
         while (true) {
-            std::string a;
-        
-            std::cout << "command: ";
-            std::cin >> a;
-
-            // Quit the program if the input is "quit"
-            if (a == "quit") {
-                break;
-            }
+            std::cin.get();
         
             // Simulate and present next step if otherwise
             enforcer_ptr->enforce_once();
@@ -64,9 +56,6 @@ int main() {
         // Self-explanatory: handle exceptions
         FlexomataErrors::handle_exception(e);
     }
-
-    // Optional for interactive shells. Ensures that the console window on Windows does not close immediately.
-    std::cin.get();
 
     return 0;
 }
