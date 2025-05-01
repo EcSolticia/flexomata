@@ -49,6 +49,8 @@ const std::string FlexomataArguments::get_valid_argument(const int argc, char** 
     return config_path;
 }
 
+namespace Flexomata {
+
 const Grid* SimulationScene::get_grid() const {
     return &this->grid;
 }
@@ -79,4 +81,6 @@ SimulationScene::SimulationScene(const std::string& config_text, construct_from_
 SimulationScene::SimulationScene(const std::string& config_path, construct_from_predefined_path) {
     this->grid = Grid();
     ConfigLoader configloader = ConfigLoader(config_path, &this->grid, ConfigLoader::construct_from_path{});
+}
+
 }

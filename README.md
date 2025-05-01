@@ -2,6 +2,8 @@
 
 Flexomata is a simple framework for handling cellular automata simulation in C++ as a static library. The user may provide a "rule function" to operate per each grid cell along with an initial configuration. Flexomata can thereafter apply the rule to each cell and offers access to the evolved state of the grid.
 
+> **Note**: In spite of being fully functional as is, Flexomata is still under initial development. Notably, its API could undergo multiple minor changes prior to finalization.
+
 # Installation
 
 ## Supported Platforms
@@ -139,10 +141,10 @@ int main() {
     try {
 
         // Create the entry point of the simulation and the interface
-        SimulationScene sim = SimulationScene(config_text, SimulationScene::construct_from_text{});
+        Flexomata::SimulationScene sim = Flexomata::SimulationScene(config_text, Flexomata::SimulationScene::construct_from_text{});
 
         // Access the Grid object managed by the simulation handler, read-only
-        const Grid* grid_ptr = sim.get_grid();
+        const Flexomata::Grid* grid_ptr = sim.get_grid();
 
         // Represent the rules of Conway's Game of Life
         // https://conwaylife.com/wiki/Conway%27s_Game_of_Life#Rules
@@ -160,7 +162,7 @@ int main() {
         sim.attach_rule(game_of_life);
 
         // Get access to the simulation's Enforcer object, responsible for actually applying said rules.
-        const Enforcer* enforcer_ptr = sim.get_enforcer();
+        const Flexomata::Enforcer* enforcer_ptr = sim.get_enforcer();
 
         while (true) {
             // Do not execute the following blocks until the return key is pressed
@@ -203,7 +205,18 @@ You may wish to run the executable to see if it behaves as expected.
 
 # Usage Documentation
 ## Accessible Classes and Namespaces
+
+### `Flexomata` (Namespace)
+Encapsulates the core classes of Flexomata. 
+These classes include:
+    - `SimulationScene`.
+    - `Grid`.
+    - `Enforcer`.
+    - `ConfigLoader` (an internal class used to handle config loading).
+
 ### `SimulationScene` (`flexomata.h`)
+Belongs to the `Flexomata` namespace.
+
 Creates a separate "scene" for a particular simulation, with predefined Grid dimensions and an initial configuration. Is the entry point for all pertinent simulation functionalities. Other accessible classes can only be accessed through an instance of `SimulationScene`.
 #### Accessible Member Functions
 - `const Grid* get_grid() const`:
@@ -243,6 +256,8 @@ try {
 ```
 
 ### `Grid` (`grid.h`)
+Belongs to the `Flexomata` namespace.
+
 Handles the cellular automata grid. Accessible member functions allow reading the current state and dimensions.
 
 Exhibits a "toroidal", wrap-around behavior on the boundaries.
@@ -276,6 +291,8 @@ Get the value/state of a specific neighbor of a particular cell location on the 
 Get the number of neighboring cells of a specific value/state.
 
 ### `Enforcer` (`enforcer.h`)
+Belongs to the `Flexomata` namespace.
+
 #### Accessible Member Functions
 - `void enforce_once() const`: 
 Apply the rule to the grid once.

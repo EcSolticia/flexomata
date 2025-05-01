@@ -18,9 +18,9 @@ int main() {
 
     try {
 
-        SimulationScene sim = SimulationScene("../config.txt", SimulationScene::construct_from_predefined_path{});
+        Flexomata::SimulationScene sim = Flexomata::SimulationScene("../config.txt", Flexomata::SimulationScene::construct_from_predefined_path{});
         
-        const Grid* grid_ptr = sim.get_grid();
+        const Flexomata::Grid* grid_ptr = sim.get_grid();
 
         FlexomataTypes::RuleFunc highlife = [grid_ptr](size_t x, size_t y) -> size_t {
             const size_t neighbor_count = grid_ptr->get_neighbor_count(x, y, 1);
@@ -34,7 +34,7 @@ int main() {
 
         sim.attach_rule(highlife);
 
-        const Enforcer* enfptr = sim.get_enforcer();
+        const Flexomata::Enforcer* enfptr = sim.get_enforcer();
 
         while (true) {
             std::cin.get();

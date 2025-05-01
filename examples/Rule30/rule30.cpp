@@ -24,13 +24,13 @@ int main() {
 
 
     try {
-        SimulationScene sim = SimulationScene(config_text, SimulationScene::construct_from_text{});
+        Flexomata::SimulationScene sim = Flexomata::SimulationScene(config_text, Flexomata::SimulationScene::construct_from_text{});
 
-        const Grid* grid_ptr = sim.get_grid();
+        const Flexomata::Grid* grid_ptr = sim.get_grid();
 
         FlexomataTypes::RuleFunc rule30 = [grid_ptr](size_t x, size_t y) -> size_t {
-            const size_t left = grid_ptr->get_neighbor(x, y, Grid::LEFT);
-            const size_t right = grid_ptr->get_neighbor(x, y, Grid::RIGHT);
+            const size_t left = grid_ptr->get_neighbor(x, y, Flexomata::Grid::LEFT);
+            const size_t right = grid_ptr->get_neighbor(x, y, Flexomata::Grid::RIGHT);
             const size_t center = grid_ptr->get_pixel(x, y);
 
             return (left == !(right || center));
@@ -38,7 +38,7 @@ int main() {
 
         sim.attach_rule(rule30);
 
-        const Enforcer* enf = sim.get_enforcer();
+        const Flexomata::Enforcer* enf = sim.get_enforcer();
 
         int steps_left = 14;
 

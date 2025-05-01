@@ -1,6 +1,8 @@
 #include "configloader.h"
 #include "grid.h"
 
+namespace Flexomata {
+
 void ConfigLoader::load_grid_data(const std::string& stringset, Grid* grid_ptr) const {
     bool reading_line = false;
     size_t reading_x = 0;
@@ -75,4 +77,6 @@ ConfigLoader::ConfigLoader(const std::string& config_path, Grid* grid_ptr, const
 
 ConfigLoader::ConfigLoader(const std::string& config_text, Grid* grid_ptr, construct_from_text) {
     this->load_grid_data(config_text, grid_ptr);
+}
+
 }

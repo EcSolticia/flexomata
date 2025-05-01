@@ -1,5 +1,7 @@
 #include "grid.h"
 
+namespace Flexomata {
+
 bool Grid::is_initialized() const {
     return are_init_vars(this->get_width(), this->get_height());
 }
@@ -122,4 +124,6 @@ void Grid::initialize_grid(const size_t width, const size_t height) {
 Grid::Grid() {
     this->width = 0;
     this->height = 0;
+}
+
 }

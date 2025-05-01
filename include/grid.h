@@ -3,6 +3,8 @@
 #include <vector>
 #include <functional>
 
+namespace Flexomata {
+
 class Grid {
     size_t width;
     size_t height;
@@ -75,3 +77,5 @@ public:
 
     Grid();
 };
+
+}

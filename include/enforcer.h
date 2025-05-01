@@ -4,6 +4,8 @@
 
 #include "types.h"
 
+namespace Flexomata {
+
 class Grid;
 
 class Enforcer {
@@ -19,3 +21,5 @@ public:
 
     Enforcer(const FlexomataTypes::RuleFunc& rule, Grid* grid_ptr);
 };
+
+}

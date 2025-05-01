@@ -1,6 +1,8 @@
 #include "enforcer.h"
 #include "grid.h"
 
+namespace Flexomata {
+
 void Enforcer::enforce_once() const {
     const size_t max_j = grid_ptr->get_height();
     const size_t max_i = grid_ptr->get_width();
@@ -42,4 +44,6 @@ Enforcer::Enforcer(const FlexomataTypes::RuleFunc& rule, Grid* grid_ptr) {
 
     this->grid_ptr = grid_ptr;
     this->rule = rule;
+}
+
 }

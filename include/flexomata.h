@@ -27,6 +27,8 @@ namespace FlexomataErrors {
     void handle_exception(const std::exception& e);
 }
 
+namespace Flexomata {
+
 class SimulationScene {
 
     Grid grid;
@@ -46,3 +48,5 @@ public:
     SimulationScene(const std::string& config_text, construct_from_text);
     SimulationScene(const std::string& config_path, construct_from_predefined_path);
 };
+
+}

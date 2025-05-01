@@ -21,10 +21,10 @@ int main() {
     try {
 
         // Create the entry point of the simulation and the interface
-        SimulationScene sim = SimulationScene(config_text, SimulationScene::construct_from_text{});
+        Flexomata::SimulationScene sim = Flexomata::SimulationScene(config_text, Flexomata::SimulationScene::construct_from_text{});
 
         // Access the Grid object managed by the simulation handler, read-only
-        const Grid* grid_ptr = sim.get_grid();
+        const Flexomata::Grid* grid_ptr = sim.get_grid();
 
         // Represent the rules of Conway's Game of Life
         // https://conwaylife.com/wiki/Conway%27s_Game_of_Life#Rules
@@ -42,12 +42,13 @@ int main() {
         sim.attach_rule(game_of_life);
 
         // Get access to the simulation's Enforcer object, responsible for actually applying said rules.
-        const Enforcer* enforcer_ptr = sim.get_enforcer();
+        const Flexomata::Enforcer* enforcer_ptr = sim.get_enforcer();
 
         while (true) {
+            // Do not execute the following blocks until the return key is pressed
             std::cin.get();
         
-            // Simulate and present next step if otherwise
+            // Simulate and present next step
             enforcer_ptr->enforce_once();
             grid_ptr->print_data();
         }
