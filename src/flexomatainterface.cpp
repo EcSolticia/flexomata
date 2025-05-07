@@ -62,6 +62,13 @@ const Enforcer* SimulationScene::get_enforcer() const {
     return &this->enforcer.value();
 }
 
+DeferredConfigLoader* SimulationScene::get_deferred_configloader() {
+    if (!this->deferred_configloader.has_value()) {
+        throw std::runtime_error("To use the deferred configloader, construct the SimulationScene accordingly.");
+    }
+    return &this->deferred_configloader.value();
+}
+
 void SimulationScene::attach_rule(const FlexomataTypes::RuleFunc& rule) {
     this->enforcer = Enforcer(rule, &this->grid);
 }
@@ -81,6 +88,11 @@ SimulationScene::SimulationScene(const std::string& config_text, construct_from_
 SimulationScene::SimulationScene(const std::string& config_path, construct_from_predefined_path) {
     this->grid = Grid();
     ConfigLoader configloader = ConfigLoader(config_path, &this->grid, ConfigLoader::construct_from_path{});
+}
+
+SimulationScene::SimulationScene(const size_t grid_width, const size_t grid_height, construct_from_deferred_config) {
+    this->grid = Grid();
+    this->deferred_configloader = DeferredConfigLoader(grid_width, grid_height, &this->grid);
 }
 
 }

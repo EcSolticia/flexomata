@@ -12,6 +12,7 @@
 #include "grid.h"
 #include "enforcer.h"
 #include "configloader.h"
+#include "deferred_configloader.h"
 
 namespace FlexomataArguments {
 
@@ -33,10 +34,12 @@ class SimulationScene {
 
     Grid grid;
     std::optional<Enforcer> enforcer;
+    std::optional<DeferredConfigLoader> deferred_configloader;
 
 public:
     const Grid* get_grid() const;
     const Enforcer* get_enforcer() const;
+    DeferredConfigLoader* get_deferred_configloader();
 
     void attach_rule(const FlexomataTypes::RuleFunc& rule);
 
@@ -47,6 +50,10 @@ public:
 
     SimulationScene(const std::string& config_text, construct_from_text);
     SimulationScene(const std::string& config_path, construct_from_predefined_path);
+
+    struct construct_from_deferred_config{};
+
+    SimulationScene(const size_t grid_width, const size_t grid_height, construct_from_deferred_config);
 };
 
 }

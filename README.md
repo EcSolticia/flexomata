@@ -223,17 +223,23 @@ Creates a separate "scene" for a particular simulation, with predefined Grid dim
 Get access to the associated `Grid` object.
 - `const Enforcer* get_enforcer() const`:
 Get access to the associated `Enforcer` object. Throws an exception if no rule is attached.
+- `DeferredConfigLoader* get_deferred_configloader()`:
+Get access to the `DeferredConfigLoader` object. Can be used to specify the config programmatically for it to be manually loaded through `DeferredConfigLoader::load_config_into_target`.
 - `void attach_rule(const FlexomataTypes::RuleFunc& rule)`:
 Attach a rule to the simulation interface. Creates an `Enforcer` object using the associated rule. Rule can be changed any number of times at run-time.
 - `SimulationScene(const int argc, char** argv)`:
 Constructor to initialize the scene using initial configuration specified in a file from the terminal, specifically the second argument. Example: `./FlexomataApp path/to/config/file.txt`.
 
 In the absence of the argument, Flexomata looks for `config.txt` in the current working directory, and if it exists, attempts to load the initial configuration from that.
-- `SimulationScene(const std::string& config_text)`: 
+- `SimulationScene(const std::string& config_text, construct_from_text)`: 
 Constructor to initialize the scene using initial configuration specified in a string.
+- `SimulationScene(const std::string& config_path, construct_from_predefined_path)`:
+Constructor to initialize the scene using initial configuration from a predefined file (relative to the current working directory of the terminal).
+- `SimulationScene(const size_t grid_width, const size_t grid_height, construct_from_deferred_config)`:
+Constructor to initialize the scene without a predefiend configuration. Creates a `DeferredConfigLoader` object and allows access to it through `SimulationScene::get_deferred_configloader`.
 
 #### Notes
-- `SimulationScene` owns and manages the memory for the associated stack-allocated `Enforcer` and `Grid` objects. Practically, this means that you do not have to worry about freeing their memory separately.
+- `SimulationScene` stack-allocates any pertinent `Grid`, `Enforcer`, or `DeferredConfigLoader` object. Practically, this means that you do not have to worry about their memory.
 - To use Flexomata through the `SimulationScene` class, you have to include and only include `flexomata.h` from the include directory. 
 - It may be possible to achieve a lower-level control over the behavior of the simulation by accessing the other classes more directly, but that is not tested. Furthermore, this is not something Flexomata is designed for and around, and hence is not documented as of now.
 
@@ -298,6 +304,15 @@ Belongs to the `Flexomata` namespace.
 Apply the rule to the grid once.
 - `void enforce(size_t by_steps) const`:
 Apply the rule to the grid a specific number of times.
+
+### `DeferredConfigLoader` (`deferred_configloader.h`)
+Belongs to the `Flexomata` namespace.
+
+#### Accessible Member Functions
+- `void set_config_pixel(const size_t x, const size_t y, const size_t value)`:
+Set the specific value of a cell on the initial grid configuration.
+- `void load_config_into_target() const`:
+Load the specified configuration into the target grid, as returned by `SimulationScene::get_grid`.
 
 ## Configuration Parsing
 Each instance of `SimulationScene`, and hence each simulation instance, must be initialized with a configuration string. The configurations string is either passed on explicitly, or read from a file. As of now, the configuration only specifies the initial state of the grid. That is to say, it specifies the value or state of each cell in the grid, represented as a non-negative integer.
