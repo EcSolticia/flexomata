@@ -55,10 +55,30 @@ void ConfigLoader::load_grid_data(const std::string& stringset, Grid* grid_ptr) 
     grid_ptr->pre_init_run([&](){
         grid_ptr->initialize_grid(reading_x, reading_y);
     });
-    grid_ptr->post_init_run([&](){
-        grid_ptr->set_data(dummy_data);
-    });
+    grid_ptr->set_data(dummy_data);
+}
 
+void ConfigLoader::load_into_target() const {
+    if (!target_grid_ptr) {
+        throw std::runtime_error("load_into_target method only available through the construct_for_later constructor.");
+    }
+    target_grid_ptr->pre_init_run([&](){
+        target_grid_ptr->initialize_grid(initial_grid.get_width(), initial_grid.get_height());
+    });
+    target_grid_ptr->set_data(initial_grid.get_data());
+}
+
+void ConfigLoader::set_grid_config(const size_t x, const size_t y, const size_t value) {
+    initial_grid.post_init_run([&]{
+        initial_grid.set_pixel(x, y, value);
+    });
+}
+
+ConfigLoader::ConfigLoader(const size_t width, const size_t height, Grid* grid_ptr, construct_for_later) {
+    initial_grid.pre_init_run([&]{
+        initial_grid.initialize_grid(width, height);
+    });
+    target_grid_ptr = grid_ptr;
 }
 
 ConfigLoader::ConfigLoader(const std::string& config_path, Grid* grid_ptr, construct_from_path) {
