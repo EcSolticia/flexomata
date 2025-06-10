@@ -1,4 +1,6 @@
 #include "flexomata.h"
+#include "configloader.h"
+#include "deferred_configloader.h"
 
 void FlexomataErrors::handle_exception(const std::exception& e) {
     if (typeid(e) == typeid(std::invalid_argument)) {
@@ -63,10 +65,10 @@ const Enforcer* SimulationScene::get_enforcer() const {
 }
 
 DeferredConfigLoader* SimulationScene::get_deferred_configloader() {
-    if (!this->deferred_configloader.has_value()) {
+    if (!this->deferred_configloader) {
         throw std::runtime_error("To use the deferred configloader, construct the SimulationScene accordingly.");
     }
-    return &this->deferred_configloader.value();
+    return this->deferred_configloader.get();
 }
 
 void SimulationScene::attach_rule(const FlexomataTypes::RuleFunc& rule) {
@@ -92,7 +94,13 @@ SimulationScene::SimulationScene(const std::string& config_path, construct_from_
 
 SimulationScene::SimulationScene(const size_t grid_width, const size_t grid_height, construct_from_deferred_config) {
     this->grid = Grid();
-    this->deferred_configloader = DeferredConfigLoader(grid_width, grid_height, &this->grid);
+    this->deferred_configloader = std::make_unique<DeferredConfigLoader>(
+        grid_width, 
+        grid_height, 
+        &this->grid
+    );
 }
+
+SimulationScene::~SimulationScene() = default;
 
 }

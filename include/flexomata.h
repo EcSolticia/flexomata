@@ -11,8 +11,6 @@
 
 #include "grid.h"
 #include "enforcer.h"
-#include "configloader.h"
-#include "deferred_configloader.h"
 
 namespace FlexomataArguments {
 
@@ -30,11 +28,13 @@ namespace FlexomataErrors {
 
 namespace Flexomata {
 
+class DeferredConfigLoader;
+
 class SimulationScene {
 
     Grid grid;
     std::optional<Enforcer> enforcer;
-    std::optional<DeferredConfigLoader> deferred_configloader;
+    std::unique_ptr<DeferredConfigLoader> deferred_configloader;
 
 public:
     const Grid* get_grid() const;
@@ -54,6 +54,8 @@ public:
     struct construct_from_deferred_config{};
 
     SimulationScene(const size_t grid_width, const size_t grid_height, construct_from_deferred_config);
+
+    ~SimulationScene();
 };
 
 }
