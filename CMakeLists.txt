@@ -7,7 +7,6 @@ add_library(${PROJECT_NAME} STATIC
     src/grid.cpp
     src/configloader.cpp
     src/deferred_configloader.cpp
-    src/enforcer.cpp
 )
 
 target_include_directories(${PROJECT_NAME}

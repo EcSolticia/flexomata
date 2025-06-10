@@ -32,9 +32,7 @@ int main() {
             }
         };
 
-        sim.attach_rule(highlife);
-
-        const Flexomata::Enforcer* enfptr = sim.get_enforcer();
+        sim.set_rule(highlife);
 
         while (true) {
             std::cin.get();
@@ -43,7 +41,7 @@ int main() {
             make_palatable(data);
 
             print_data_vector(grid_ptr->get_width(), grid_ptr->get_height(), data);
-            enfptr->enforce_once();
+            sim.enforce_rule_once();
         }
 
     } catch (const std::exception& e) {

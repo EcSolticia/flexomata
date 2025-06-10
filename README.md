@@ -158,18 +158,15 @@ int main() {
             }
         };
 
-        // Self-explanatory: Attach the rule
-        sim.attach_rule(game_of_life);
-
-        // Get access to the simulation's Enforcer object, responsible for actually applying said rules.
-        const Flexomata::Enforcer* enforcer_ptr = sim.get_enforcer();
+        // Let the simulation know of the rule to enforce
+        sim.set_rule(game_of_life);
 
         while (true) {
             // Do not execute the following blocks until the return key is pressed
             std::cin.get();
         
             // Simulate and present next step
-            enforcer_ptr->enforce_once();
+            sim.enforce_rule_once();
             grid_ptr->print_data();
         }
 
@@ -211,9 +208,8 @@ Encapsulates the core classes of Flexomata.
 These classes include:
     - `SimulationScene`.
     - `Grid`.
-    - `Enforcer`.
+    - `DeferredConfigLoader`
     - `ConfigLoader` (an internal class used to handle config loading).
-
 ### `SimulationScene` (`flexomata.h`)
 Belongs to the `Flexomata` namespace.
 
@@ -221,12 +217,14 @@ Creates a separate "scene" for a particular simulation, with predefined Grid dim
 #### Accessible Member Functions
 - `const Grid* get_grid() const`:
 Get access to the associated `Grid` object.
-- `const Enforcer* get_enforcer() const`:
-Get access to the associated `Enforcer` object. Throws an exception if no rule is attached.
 - `DeferredConfigLoader* get_deferred_configloader()`:
 Get access to the `DeferredConfigLoader` object. Can be used to specify the config programmatically for it to be manually loaded through `DeferredConfigLoader::load_config_into_target`.
-- `void attach_rule(const FlexomataTypes::RuleFunc& rule)`:
-Attach a rule to the simulation interface. Creates an `Enforcer` object using the associated rule. Rule can be changed any number of times at run-time.
+- `void set_rule(const FlexomataTypes::RuleFunc& rule)`:
+Set the simulation rule. This will determine the specific cellular automata that is being simulated.
+- `void enforce_rule_once()`:
+Apply the simulation rule to the grid exactly once.
+- `void enforce_rule(const size_t by_steps)`:
+Apply the simuation rule to the grid exactly `by_steps` times.
 - `SimulationScene(const int argc, char** argv)`:
 Constructor to initialize the scene using initial configuration specified in a file from the terminal, specifically the second argument. Example: `./FlexomataApp path/to/config/file.txt`.
 
@@ -239,7 +237,7 @@ Constructor to initialize the scene using initial configuration from a predefine
 Constructor to initialize the scene without a predefiend configuration. Creates a `DeferredConfigLoader` object and allows access to it through `SimulationScene::get_deferred_configloader`.
 
 #### Notes
-- `SimulationScene` stack-allocates any pertinent `Grid`, `Enforcer`, or `DeferredConfigLoader` object. Practically, this means that you do not have to worry about their memory.
+- `SimulationScene` manages the memory of pertinent `Grid` and `DeferredConfigLoader` objects automatically. The former is currently stack-allocated. The latter is heap-allocated through a smart pointer, and hence is automatically freed as the `SimulationScene` object goes out of scope.
 - To use Flexomata through the `SimulationScene` class, you have to include and only include `flexomata.h` from the include directory. 
 - It may be possible to achieve a lower-level control over the behavior of the simulation by accessing the other classes more directly, but that is not tested. Furthermore, this is not something Flexomata is designed for and around, and hence is not documented as of now.
 
@@ -295,15 +293,6 @@ Get the value of a specific cell on the grid.
 Get the value/state of a specific neighbor of a particular cell location on the grid.
 - `size_t get_neighbor_count(const size_t x, const size_t y, const size_t of_state) const`
 Get the number of neighboring cells of a specific value/state.
-
-### `Enforcer` (`enforcer.h`)
-Belongs to the `Flexomata` namespace.
-
-#### Accessible Member Functions
-- `void enforce_once() const`: 
-Apply the rule to the grid once.
-- `void enforce(size_t by_steps) const`:
-Apply the rule to the grid a specific number of times.
 
 ### `DeferredConfigLoader` (`deferred_configloader.h`)
 Belongs to the `Flexomata` namespace.

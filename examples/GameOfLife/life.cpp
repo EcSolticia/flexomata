@@ -38,18 +38,15 @@ int main() {
             }
         };
 
-        // Self-explanatory: Attach the rule
-        sim.attach_rule(game_of_life);
-
-        // Get access to the simulation's Enforcer object, responsible for actually applying said rules.
-        const Flexomata::Enforcer* enforcer_ptr = sim.get_enforcer();
+        // Let the simulation know of the rule to enforce
+        sim.set_rule(game_of_life);
 
         while (true) {
             // Do not execute the following blocks until the return key is pressed
             std::cin.get();
         
             // Simulate and present next step
-            enforcer_ptr->enforce_once();
+            sim.enforce_rule_once();
             grid_ptr->print_data();
         }
 

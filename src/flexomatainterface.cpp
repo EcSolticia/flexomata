@@ -57,13 +57,6 @@ const Grid* SimulationScene::get_grid() const {
     return &this->grid;
 }
 
-const Enforcer* SimulationScene::get_enforcer() const {
-    if (!this->enforcer.has_value()) {
-        throw std::runtime_error("No rule attached to the simulation interface.");
-    }
-    return &this->enforcer.value();
-}
-
 DeferredConfigLoader* SimulationScene::get_deferred_configloader() {
     if (!this->deferred_configloader) {
         throw std::runtime_error("To use the deferred configloader, construct the SimulationScene accordingly.");
@@ -71,8 +64,34 @@ DeferredConfigLoader* SimulationScene::get_deferred_configloader() {
     return this->deferred_configloader.get();
 }
 
-void SimulationScene::attach_rule(const FlexomataTypes::RuleFunc& rule) {
-    this->enforcer = Enforcer(rule, &this->grid);
+void SimulationScene::set_rule(const FlexomataTypes::RuleFunc& rule) {
+    this->rule = rule;
+}
+
+void SimulationScene::enforce_rule_once() {
+    if (!this->rule) {
+        throw std::runtime_error("No rule to enforce.");
+    }
+
+    const size_t max_j = grid.get_height();
+    const size_t max_i = grid.get_width();
+
+    Grid grid_buffer = grid;
+
+    for (size_t j = 0; j < max_j; ++j) {
+        for (size_t i = 0; i < max_i; ++i) {
+
+            grid_buffer.set_pixel(i, j, rule(i, j));
+
+        }
+    }
+
+    grid = grid_buffer;
+}
+void SimulationScene::enforce_rule(const size_t by_steps) {
+    for (size_t i = 0; i < by_steps; ++i) {
+        enforce_rule_once();
+    }
 }
 
 SimulationScene::SimulationScene(const int argc, char** argv) {

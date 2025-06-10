@@ -36,9 +36,7 @@ int main() {
             return (left == !(right || center));
         };
 
-        sim.attach_rule(rule30);
-
-        const Flexomata::Enforcer* enf = sim.get_enforcer();
+        sim.set_rule(rule30);
 
         int steps_left = 14;
 
@@ -46,7 +44,7 @@ int main() {
 
             Rule30Helpers::print_line(grid_ptr->get_data());
             
-            enf->enforce_once();
+            sim.enforce_rule_once();
         }
         
     } catch (const std::exception& e) {
